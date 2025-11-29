@@ -6,7 +6,7 @@
     "node": ">=18.16"
   },
   "dependencies": {
-    "axios": "^1.7.2",
+    "axios": "1.13.2",
     "cordova-plugin-camera": "7.0.0",
     "cordova-plugin-device": "2.1.0",
     "cordova-plugin-inappbrowser": "6.0.0",
@@ -15,10 +15,11 @@
     "ionicons": "^4.5.10-0",
     "js-base64": "^3.7.7",
     "lz-string": "^1.5.0",
+    "mitt": "^3.0.1",
     "monaca-plugin-monaca-core": "3.3.1",
     "onsenui": "2.12.8",
     "pako": "^2.1.0",
-    "pino": "^9.6.0",
+    "pino": "10.1.0",
     "vue": "3.3.7",
     "vue-onsenui": "3.0.0",
     "vuex": "^4.1.0",
