@@ -1,0 +1,222 @@
+.blue {
+  color: blue;
+}
+
+.datetime-label {
+  margin: 0 1rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.input-area {
+  margin: 5% auto;
+
+  /* for grid layout */
+  display: grid;
+  grid-template-columns: 100%;
+}
+
+.inputs-side-by-side-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.list-header {
+  padding: 0 0.25rem;
+  font-size: 1rem;
+}
+
+.list-item-container {
+  margin: 0;
+  padding: 0;
+
+  width: 100%;
+
+  /* for grid layout */
+  display: grid;
+  grid-template-columns: 45% 1fr;
+}
+
+.list-item-note {
+  margin: 0 0 2% 2%;
+
+  font-size: 0.8rem;
+}
+
+.list-item-note--caution {
+  margin: 0 0 2% 2%;
+  display: block;
+
+  font-size: 0.8rem;
+  color: red;
+}
+
+.list-item-title {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  font-size: 0.85rem;
+  font-weight: bold;
+
+  /* for grid layout */
+  grid-row: 1 / 2;
+  grid-column: 1 / 1;
+}
+
+.list-item-title-note {
+  margin: 2% 0 0 2%;
+  width: 100%;
+  font-size: 0.75rem;
+}
+
+.list-item-value {
+  margin: 2% 5% 0 2%;
+  padding: 0;
+  width: 100%;
+
+  font-size: 0.9rem;
+
+  /* for grid layout */
+  grid-row: 2 / 2;
+  grid-column: 1 / 1;
+}
+
+.list-item-value--row-1-col-2 {
+  padding: 0 0 0 2%;
+
+  font-size: 0.8rem;
+  text-align: left;
+  word-break: break-all;
+  overflow-wrap: break-word;
+
+  /* for grid layout */
+  grid-row: 1 / 1;
+  grid-column: 2 / 2;
+}
+
+/* カスタムラジオボタン (大きめの●ボタン) */
+.radio-circle {
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 2px solid #007aff; /* iOS風のブルーカラー */
+  background-color: white;
+  cursor: pointer;
+}
+
+/* ラジオボタンのデザインをスマホ向けに最適化 */
+.radio-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  gap: 0.5rem;
+  padding: 10px; /* タッチしやすくする */
+  border-radius: 8px; /* 角を丸くする */
+  cursor: pointer;
+  user-select: none;
+}
+
+/* デフォルトのラジオボタンを非表示 */
+.radio-label input[type='radio'] {
+  display: none;
+}
+
+/* 選択された場合のスタイル */
+.radio-label input[type='radio']:checked + .radio-circle {
+  background-color: #007aff;
+  border: 2px solid #007aff;
+}
+
+/* 選択された場合に黒丸を表示 */
+.radio-label input[type='radio']:checked + .radio-circle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.radio-label-text {
+  margin: 0 0 0 1rem;
+}
+
+.red-bold {
+  color: red;
+  font-weight: bold;
+}
+
+.selectbox {
+  /* 枠線と矢印を消す */
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* 枠線と矢印を消す */
+  margin: 0.4rem 0 0.2rem 0;
+  padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid gray;
+  font-size: 1.1rem;
+  line-height: 1.1rem;
+  width: 4rem;
+  text-align-last: center;
+  color: #474747;
+}
+
+.selectbox:focus {
+  border-bottom: 2px solid blue;
+}
+
+.textbox {
+  width: 100%;
+}
+
+.textbox--20 {
+  width: 20%;
+}
+
+.textbox--30 {
+  width: 30%;
+}
+
+.textbox--40 {
+  width: 40%;
+}
+
+.textbox--75 {
+  width: 75%;
+}
+
+.textbox.time {
+  margin: 0.2rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid gray;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  width: 2rem;
+  text-align-last: center;
+}
+
+.validation-message {
+  margin: 0.5rem auto 0.25rem 0.5rem;
+  color: red;
+  font-size: 0.8rem;
+}

@@ -1,0 +1,154 @@
+ons-page {
+  text-align: center;
+  justify-content: center;
+}
+
+.button {
+  margin: 4% 0;
+  width: 90%;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.button--red {
+  margin: 4% 0;
+  width: 90%;
+  background-color: #ff0000;
+}
+
+.button--w50 {
+  margin: 4% 0;
+  width: 50%;
+}
+
+.button--w80 {
+  margin: 4% 0;
+  width: 80%;
+}
+
+.button--postcode-conversion {
+  margin: 0 0 0 5%;
+  padding: 0;
+  width: 50%;
+  text-align: center;
+}
+
+.button-transition {
+  margin: 4% 0;
+  width: 90%;
+  white-space: normal;
+  overflow-wrap: break-word;
+  border-radius: 0.5rem;
+}
+
+.button-transition .label-wrapper {
+  display: flex;
+  margin: 0.2rem 0.1rem;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.button-transition .label-wrapper .title {
+  margin-left: 0.5rem;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.button-transition .label-wrapper .arrow {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+}
+
+.button-transition .label-wrapper .arrow::before {
+  content: '';
+  width: 0.6rem;
+  height: 0.6rem;
+  border-top: solid 2px #ffffff;
+  border-right: solid 2px #ffffff;
+  position: absolute;
+  left: 0.6rem;
+  top: 0.5rem;
+}
+
+.button-transition .label-wrapper .arrow.arrow-right::before {
+  transform: rotate(45deg);
+}
+
+.button-transition .description {
+  margin: 0.8rem 0.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1rem;
+}
+
+#content__footer {
+  margin-bottom: 2rem;
+}
+
+.fontsize-09 {
+  font-size: 0.9rem;
+}
+
+.fontsize-10 {
+  font-size: 1rem;
+}
+
+.note {
+  margin: 2% 3%;
+
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.note--center {
+  margin: 2% 3%;
+
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.note--small {
+  margin: 2% 3%;
+
+  text-align: left;
+  font-size: 0.6rem;
+}
+
+.red {
+  color: red;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.sender-bg-color {
+  background-color: #fffde7;
+  border: 1px solid transparent;
+}
+
+.signup-group-box {
+  position: relative;
+  margin: 2rem auto 1rem auto;
+  padding: 0 0 1rem 0;
+  width: 85%;
+  border: 1px solid gray;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.signup-navigation-text {
+  position: relative;
+  top: -12px;
+  background: #efeff4;
+  padding: 0 5px;
+}

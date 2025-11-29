@@ -1,0 +1,13 @@
+{
+    "cordova_version": "12.0",
+    "framework_version": "3.5",
+    "xcode_version": "16.1.0",
+    "cordova_android_platform": "13.0.0",
+    "cordova_ios_platform": "7.1.1",
+    "dSYM": false,
+    "AndroidRemoveDuplicatedPermissions": false,
+    "production": true,
+    "legacy_peer_deps": false,
+    "delete_devDependencies": false,
+    "java_version": "17"
+}
