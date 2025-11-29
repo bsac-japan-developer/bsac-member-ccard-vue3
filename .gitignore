@@ -8,3 +8,5 @@
 typings/
 node_modules
 package-lock.json
+www/assets/*
+!www/assets/.keep
