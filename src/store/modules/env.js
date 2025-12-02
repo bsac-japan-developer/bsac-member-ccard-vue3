@@ -1,7 +1,7 @@
 const state = {
   env: 1, // 0:本番環境 1:開発環境 2:テスト環境
   online: true, // オンライン状態を表す
-  version: '2.1.6', // アプリバージョン
+  version: 'x.x.x', // アプリバージョン
 };
 
 const getters = {
@@ -29,57 +29,13 @@ const getters = {
       case 0: // 本番環境
       case 2: // テスト環境
         return {
-          address1st: null,
-          address1stKana: null,
-          address2nd: null,
-          address2ndKana: null,
-          birthAtDay: null,
-          birthAtMonth: null,
-          birthAtYear: null,
-          bloodType: null,
-          ccardNo: null,
-          ccardNo1st: null,
-          ccardNo2nd: null,
-          diveCenterId: null,
-          diverId: null,
-          email: null,
-          gender: null,
-          mobileNo: null,
-          name: null,
-          nameEn: null,
-          nameKana: null,
-          nameJa: null,
+          loginId: null,
           password: null,
-          phoneNo: null,
-          postcode: null,
-          prefecture: null,
         };
       case 1: // 開発環境
         return {
-          address1st: '千代田区神田紺屋町１３',
-          address1stKana: 'ちよだくかんだこんやまち１３',
-          address2nd: 'サンビル４F',
-          address2ndKana: 'さんびる４かい',
-          birthAtDay: '21',
-          birthAtMonth: '06',
-          birthAtYear: '1982',
-          bloodType: 'A型',
-          ccardNo: '0000000001',
-          ccardNo1st: '0000',
-          ccardNo2nd: '0001',
-          diveCenterId: 9997,
-          diverId: '10000000',
-          email: `bsacjapan.developer+10000000@gmail.com`,
-          gender: 1,
-          mobileNo: '09012345678',
-          name: 'TARO UMINO',
-          nameEn: 'TARO UMINO',
-          nameKana: 'うみの　たろう',
-          nameJa: '海野　太郎',
-          password: 'password1234',
-          phoneNo: '0352975656',
-          postcode: '101-0035',
-          prefecture: '東京都',
+          loginId: '20132282',
+          password: '2013tboe',
         };
     }
   },

@@ -356,16 +356,13 @@ const actions = {
    * @param {*} input
    * @returns
    */
-  signin({ commit, dispatch, rootGetters }, input) {
+  signin({ commit, getters, dispatch, rootGetters }, input) {
     return api.post({
       commit,
       config: {},
-      data: {
-        email: input.email,
-        password: input.password,
-      },
+      data: conversions.toSnakeCaseForObjectV2(input),
       dispatch,
-      endpoint: 'api/v1/diver_auth/sign_in',
+      endpoint: 'api/v1/partner_auth/sign_in',
       rootGetters,
       setters: ['saveData'],
     });
