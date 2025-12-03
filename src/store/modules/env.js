@@ -71,6 +71,16 @@ const getters = {
     }
   },
   online: (state) => state.online,
+  topic: (state) => {
+    switch (state.env) {
+      case 0: // 本番環境
+        return 'bsac-member-ccard-production';
+      case 1: // 開発環境
+        return 'bsac-member-ccard-development';
+      case 2: // テスト環境
+        return 'bsac-member-ccard-staging';
+    }
+  },
   version: (state) => state.version,
 };
 

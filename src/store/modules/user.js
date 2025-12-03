@@ -377,43 +377,9 @@ const actions = {
       commit,
       config: {},
       dispatch,
-      endpoint: 'api/v1/diver_auth/sign_out',
+      endpoint: 'api/v1/partner_auth/sign_out',
       rootGetters,
       setters: ['user/clearData'],
-    });
-  },
-  /**
-   * ユーザー登録する
-   * @param {*} param0
-   * @param {*} input
-   * @returns
-   */
-  // eslint-disable-next-line no-empty-pattern
-  signup({ commit, dispatch, rootGetters }, input) {
-    return api.post({
-      commit,
-      config: {},
-      data: input,
-      dispatch,
-      endpoint: 'api/v1/diver_auth/',
-      rootGetters,
-      setters: [],
-    });
-  },
-  /**
-   * 退会する
-   * @param {*} param0
-   * @returns
-   */
-  // eslint-disable-next-line no-empty-pattern
-  unsubscribe({ commit, dispatch, rootGetters }) {
-    return api.delete({
-      commit,
-      config: {},
-      dispatch,
-      endpoint: 'api/v1/diver_auth',
-      rootGetters,
-      setters: ['clearData'],
     });
   },
   /**
