@@ -1,5 +1,6 @@
 import api from '@/common/api';
 import conversions from '@/common/conversions';
+import log from '@/common/log';
 import storage from '@/common/local-storage';
 
 const state = {
@@ -38,6 +39,7 @@ const getters = {
     const levelupCards = getters.cards.filter((card) => {
       return card.rankGroupId === 1;
     });
+
     if (levelupCards.length > 0) {
       levelupCards.sort(function (a, b) {
         // ランクレベルの降順で並び替え
@@ -110,6 +112,7 @@ const mutations = {
     });
     state.cards = list;
     storage.setItem('cards', state.cards);
+    log.output(`ccard.setIndex`, `state.cards`, state.cards);
   },
   /**
    * 取得日時をセットする
@@ -118,6 +121,7 @@ const mutations = {
   setTakenCardsAt(state) {
     state.takenCardsAt = new Date().toLocaleString('ja');
     storage.setItem('takenCardsAt', state.takenCardsAt);
+    log.output(`ccard.setTakenCardsAt`, `state.takenCardsAt`, state.takenCardsAt);
   },
 };
 
@@ -131,7 +135,7 @@ const actions = {
     return api.get({
       commit,
       config: {},
-      endpoint: `api/v2/member_app/member_ccards/`,
+      endpoint: `api/v2/member_app/member_ccards`,
       rootGetters,
       setters: ['setIndex', 'setTakenCardsAt'],
     });

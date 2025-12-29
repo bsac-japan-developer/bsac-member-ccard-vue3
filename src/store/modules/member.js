@@ -1,5 +1,6 @@
 import api from '@/common/api';
 import conversions from '@/common/conversions';
+import log from '@/common/log';
 import storage from '@/common/local-storage';
 
 const state = {
@@ -28,7 +29,7 @@ const mutations = {
   setShow(state, response) {
     state.member = conversions.toCamelCaseForObjectV2(response?.data?.data || {});
     storage.setItem('member', state.member);
-    console.log(`[member.setShow] state.member: ${JSON.stringify(state.member)}`);
+    log.output(`member.setShow`, `state.member`, state.member);
   },
 };
 

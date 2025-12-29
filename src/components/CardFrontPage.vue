@@ -3,23 +3,38 @@
     <splitter-toolbar :title="'ランク'"></splitter-toolbar>
     <div id="content__header">
       <version-check ref="versionCheck" />
+      <taken-cards-at :takenCardsAt="takenCardsAt"></taken-cards-at>
     </div>
-    <div id="content__body">ボディ</div>
+    <div id="content__body">
+      <card-detail v-if="latestCard !== null" :ccard="latestCard"></card-detail>
+    </div>
     <div id="content__footer">フッター</div>
     <v-ons-button @click="signout"> ログアウト </v-ons-button>
   </v-ons-page>
 </template>
 
 <script>
+import cardDetail from '@/components/parts/CardDetail.vue';
 import splitterToolbar from '@/components/parts/SplitterToolbar.vue';
+import takenCardsAt from '@/components/parts/TakenCardsAt.vue';
 import versionCheck from '@/components/parts/VersionCheck.vue';
 
 export default {
   components: {
+    cardDetail,
     splitterToolbar,
+    takenCardsAt,
     versionCheck,
   },
-  computed: {},
+  computed: {
+    latestCard: function () {
+      console.log(this.$store.getters['ccard/latestCard']);
+      return this.$store.getters['ccard/latestCard'];
+    },
+    takenCardsAt: function () {
+      return this.$store.getters['ccard/takenCardsAt'];
+    },
+  },
   created: function () {
     this.refresh(false);
   },
@@ -57,7 +72,10 @@ export default {
           await this.$store.dispatch('user/signin', userpass);
 
         // データ取得処理を並列実行
-        const results = await Promise.all([this.$store.dispatch('member/show')]);
+        const results = await Promise.all([
+          this.$store.dispatch('member/show'),
+          this.$store.dispatch('ccard/index'),
+        ]);
       } catch (error) {
         console.error(error);
       } finally {
