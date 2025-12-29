@@ -1,7 +1,9 @@
 <template>
   <v-ons-page>
     <splitter-toolbar :title="'ランク'"></splitter-toolbar>
-    <div id="content__header">ヘッダー</div>
+    <div id="content__header">
+      <version-check ref="versionCheck" />
+    </div>
     <div id="content__body">ボディ</div>
     <div id="content__footer">フッター</div>
     <v-ons-button @click="signout"> ログアウト </v-ons-button>
@@ -10,17 +12,21 @@
 
 <script>
 import splitterToolbar from '@/components/parts/SplitterToolbar.vue';
+import versionCheck from '@/components/parts/VersionCheck.vue';
 
 export default {
   components: {
     splitterToolbar,
+    versionCheck,
   },
   computed: {},
   created: function () {
     this.refresh(false);
   },
   data() {
-    return {};
+    return {
+      zeroDataMessage: '取得済みのランクがありません',
+    };
   },
   methods: {
     /**
@@ -39,7 +45,21 @@ export default {
             callback: () => this.signout(),
           });
         }
+
+        this.zeroDataMessage = null;
+
+        // バージョンチェックを実施する
+        if (this.$refs.versionCheck) await this.$refs.versionCheck.checkVersion();
+
+        // ログインする（devise_token_authの有効期限を延ばす）
+        const userpass = this.$store.getters['user/userpass'];
+        if (userpass?.loginId && userpass?.password)
+          await this.$store.dispatch('user/signin', userpass);
+
+        // データ取得処理を並列実行
+        const results = await Promise.all([this.$store.dispatch('member/show')]);
       } catch (error) {
+        console.error(error);
       } finally {
         this.$emit('hide-loading-navigation');
       }
