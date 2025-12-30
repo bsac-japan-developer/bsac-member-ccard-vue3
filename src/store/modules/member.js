@@ -9,6 +9,27 @@ const state = {
 
 const getters = {
   member: (state) => state.member || {},
+  /**
+   * メンバーがアクティブかを判定する
+   * @param {*} state
+   */
+  isActive: (state) => {
+    return state.member?.status === 'active';
+  },
+  /**
+   * メンバーがネガティブかを判定する
+   * @param {*} state
+   */
+  isNegative: (state) => {
+    return state.member?.status === 'negative';
+  },
+  /**
+   * メンバーがリザーブかを判定する
+   * @param {*} state
+   */
+  isReserve: (state) => {
+    return state.member?.status === 'reserve';
+  },
 };
 
 const mutations = {

@@ -3,18 +3,79 @@
     <splitter-toolbar :title="'ランク'"></splitter-toolbar>
     <div id="content__header">
       <version-check ref="versionCheck" />
-      <taken-cards-at :takenCardsAt="takenCardsAt"></taken-cards-at>
+      <!-- <v-ons-button
+        modifier="quiet"
+        v-show="notificationUnReadCount"
+        class="unread-notification-button"
+        @click="toNotificationFrontPage"
+      >
+        未読のお知らせが {{ notificationUnReadCount }} 件あります
+      </v-ons-button> -->
+      <taken-cards-at></taken-cards-at>
     </div>
     <div id="content__body">
       <card-detail v-if="latestCard !== null" :ccard="latestCard"></card-detail>
+      <div class="member-status-note">
+        <div v-show="isNegative">
+          メンバーの登録手続きは完了していますが、<span style="color: red">保険は未加入の状態</span
+          >です。 保険への加入を希望される場合は手続きを完了してください。
+        </div>
+        <div v-show="isReserve">
+          メンバーの登録手続きが完了していない為、メンバーとしての活動は出来ない状態です。
+          また、資格を復帰するのに<span style="color: red"
+            >BSAC Japanが定める講習の受講が必要になる場合があります</span
+          >ので、 ご不明な場合はBSAC Japan事務局までお問い合わせ下さい。
+        </div>
+      </div>
     </div>
-    <div id="content__footer">フッター</div>
+    <div id="content__footer">
+      <div class="quiet-button-area">
+        <!-- <v-ons-button
+          :disabled="!canShowIncidentReportButton"
+          modifier="cta"
+          class="card-front__to-incident-report-page-button"
+          @click="toIncidentReportFrontPage"
+        >
+          事故発生
+        </v-ons-button> -->
+        <!-- <p v-show="!canShowIncidentReportButton" class="member-registration-recommend-text">
+          事故報告機能を使うためにはBSACメンバー登録が必要です
+        </p> -->
+        <p v-if="levelupCardsCount !== 0 || sdcCardsCount !== 0">■その他のカード / Other Cards</p>
+        <v-ons-button
+          v-if="levelupCardsCount !== 0"
+          @click="toCardListPage(1)"
+          modifier="cta block"
+          class="button-transition"
+        >
+          <div class="label-wrapper">
+            <span class="title">Level Up ({{ levelupCardsCount }})</span>
+            <span class="arrow arrow-right"></span>
+          </div>
+        </v-ons-button>
+        <v-ons-button
+          v-if="sdcCardsCount !== 0"
+          @click="toCardListPage(2)"
+          modifier="cta block"
+          class="button-transition"
+        >
+          <div class="label-wrapper">
+            <span class="title" style="font-size: 1rem">
+              Skill Development Course(SDC) ({{ sdcCardsCount }})
+            </span>
+            <span class="arrow arrow-right"></span>
+          </div>
+        </v-ons-button>
+      </div>
+    </div>
     <v-ons-button @click="signout"> ログアウト </v-ons-button>
   </v-ons-page>
 </template>
 
 <script>
+import { markRaw } from 'vue';
 import cardDetail from '@/components/parts/CardDetail.vue';
+import cardListPage from '@/components/CardListPage.vue';
 import splitterToolbar from '@/components/parts/SplitterToolbar.vue';
 import takenCardsAt from '@/components/parts/TakenCardsAt.vue';
 import versionCheck from '@/components/parts/VersionCheck.vue';
@@ -27,12 +88,25 @@ export default {
     versionCheck,
   },
   computed: {
+    isActive: function () {
+      return this.$store.getters['member/isActive'];
+    },
+    isNegative: function () {
+      return this.$store.getters['member/isNegative'];
+    },
+    isReserve: function () {
+      return this.$store.getters['member/isReserve'];
+    },
     latestCard: function () {
-      console.log(this.$store.getters['ccard/latestCard']);
       return this.$store.getters['ccard/latestCard'];
     },
-    takenCardsAt: function () {
-      return this.$store.getters['ccard/takenCardsAt'];
+    levelupCardsCount: function () {
+      const ret = this.$store.getters['ccard/levelupCards'];
+      return ret ? ret.length : 0;
+    },
+    sdcCardsCount: function () {
+      const ret = this.$store.getters['ccard/sdcCards'];
+      return ret ? ret.length : 0;
     },
   },
   created: function () {
@@ -99,6 +173,21 @@ export default {
         this.$emit('hide-loading-navigation');
       }
     },
+    /**
+     * カード一覧ページに遷移する
+     * @param cardType
+     */
+    toCardListPage: function (cardType) {
+      this.$emit(
+        'push-page-navigation',
+        markRaw({
+          ...cardListPage,
+          onsNavigatorProps: {
+            cardType: cardType,
+          },
+        })
+      );
+    },
   },
   name: 'CardFrontPage',
 };
@@ -106,4 +195,13 @@ export default {
 
 <style scoped>
 @import '../stylesheets/base.css';
+
+.member-status-note {
+  margin: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.quiet-button-area {
+  margin: 0 0 5% 0;
+}
 </style>

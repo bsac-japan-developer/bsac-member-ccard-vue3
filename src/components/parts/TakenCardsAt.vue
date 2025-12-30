@@ -1,22 +1,26 @@
 <template>
   <div>
-    <p class="cards_taken_at-label">データ取得日時：{{ takenCardsAt }}</p>
+    <p class="label">データ取得日時：{{ takenCardsAt }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-    takenCardsAt: String,
+  computed: {
+    takenCardsAt: function () {
+      return this.$store.getters['ccard/takenCardsAt'];
+    },
   },
+  created: function () {},
+  name: 'TakenCardsAt',
 };
 </script>
 
 <style scoped>
-.cards_taken_at-label {
-  margin: 1% 1% 1% 1%;
+.label {
+  margin: 1% 5%;
 
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   text-align: right;
 }
 </style>

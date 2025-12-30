@@ -131,6 +131,10 @@ export default {
   },
   created: function () {},
   methods: {
+    /**
+     * フォントサイズを取得する
+     * @param value
+     */
     getFontSize: function (value) {
       if (!value) return 0;
       let length = value.length;
