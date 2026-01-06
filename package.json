@@ -24,7 +24,7 @@
         "vue-onsenui": "3.0.0",
         "vuex": "^4.1.0",
         "yubinbango-core2": "^0.6.3",
-        "cordova-plugin-firebasex": "16.4.0"
+        "cordova-plugin-firebasex": "16.5.0"
     },
     "scripts": {
         "monaca:preview": "npm run dev & npm run watch",
