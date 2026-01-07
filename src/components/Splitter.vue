@@ -41,7 +41,8 @@ export default {
       currentPage: 'mainTabber',
       pages: [
         { id: 'cardNavigation', name: 'ランク', tabIndex: 0 },
-        { id: 'myPageNavigation', name: 'マイページ', tabIndex: 1 },
+        { id: 'linkNavigation', name: '各種リンク', tabIndex: 1 },
+        { id: 'myPageNavigation', name: 'マイページ', tabIndex: 2 },
       ],
       openSide: false,
       activeTab: 0,

@@ -19,6 +19,7 @@
 <script>
 import { markRaw } from 'vue';
 import cardNavigation from '@/components/CardNavigation.vue';
+import linkNavigation from '@/components/LinkNavigation.vue';
 import loading from '@/components/parts/Loading.vue';
 import myPageNavigation from '@/components/MyPageNavigation.vue';
 import signinNavigation from '@/components/SigninNavigation.vue';
@@ -26,6 +27,7 @@ import signinNavigation from '@/components/SigninNavigation.vue';
 export default {
   components: {
     cardNavigation,
+    linkNavigation,
     loading,
     myPageNavigation,
     signinNavigation,
@@ -59,6 +61,11 @@ export default {
           icon: this.isAndroid() ? null : 'ion-ios-home',
           label: 'ランク',
           page: markRaw(cardNavigation),
+        },
+        {
+          icon: this.isAndroid() ? null : 'ion-ios-bookmarks',
+          label: '各種リンク',
+          page: markRaw(linkNavigation),
         },
         {
           icon: this.isAndroid() ? null : 'ion-ios-person',

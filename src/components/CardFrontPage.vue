@@ -149,6 +149,7 @@ export default {
         const results = await Promise.all([
           this.$store.dispatch('member/show'),
           this.$store.dispatch('ccard/index'),
+          this.$store.dispatch('link/index'),
         ]);
       } catch (error) {
         console.error(error);
