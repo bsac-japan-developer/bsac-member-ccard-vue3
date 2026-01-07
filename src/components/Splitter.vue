@@ -39,7 +39,10 @@ export default {
   data() {
     return {
       currentPage: 'mainTabber',
-      pages: [{ id: 'cardNavigation', name: 'ランク', tabIndex: 0 }],
+      pages: [
+        { id: 'cardNavigation', name: 'ランク', tabIndex: 0 },
+        { id: 'myPageNavigation', name: 'マイページ', tabIndex: 1 },
+      ],
       openSide: false,
       activeTab: 0,
     };
