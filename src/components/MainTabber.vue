@@ -19,17 +19,21 @@
 <script>
 import { markRaw } from 'vue';
 import cardNavigation from '@/components/CardNavigation.vue';
+import incidentReportNavigation from '@/components/IncidentReportNavigation.vue';
 import linkNavigation from '@/components/LinkNavigation.vue';
 import loading from '@/components/parts/Loading.vue';
 import myPageNavigation from '@/components/MyPageNavigation.vue';
+import notificationNavigation from '@/components/NotificationNavigation.vue';
 import signinNavigation from '@/components/SigninNavigation.vue';
 
 export default {
   components: {
     cardNavigation,
+    incidentReportNavigation,
     linkNavigation,
     loading,
     myPageNavigation,
+    notificationNavigation,
     signinNavigation,
   },
   computed: {
@@ -63,7 +67,17 @@ export default {
           page: markRaw(cardNavigation),
         },
         {
-          icon: this.isAndroid() ? null : 'ion-ios-bookmarks',
+          icon: this.isAndroid() ? null : 'ion-ios-alert',
+          label: '事故報告',
+          page: markRaw(incidentReportNavigation),
+        },
+        {
+          icon: this.isAndroid() ? null : 'ion-ios-volume-high',
+          label: 'お知らせ',
+          page: markRaw(notificationNavigation),
+        },
+        {
+          icon: this.isAndroid() ? null : 'ion-ios-link',
           label: '各種リンク',
           page: markRaw(linkNavigation),
         },
