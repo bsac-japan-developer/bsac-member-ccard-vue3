@@ -14,6 +14,9 @@
       <taken-cards-at></taken-cards-at>
     </div>
     <div id="content__body">
+      <v-ons-button modifier="quiet" @click="refresh(true)" class="reload-button">
+        <img src="../../www/images/reload.png" />
+      </v-ons-button>
       <card-detail v-if="latestCard !== null" :ccard="latestCard"></card-detail>
       <div class="member-status-note">
         <div v-show="isNegative">
@@ -68,7 +71,6 @@
         </v-ons-button>
       </div>
     </div>
-    <v-ons-button @click="signout"> ログアウト </v-ons-button>
   </v-ons-page>
 </template>
 
@@ -103,6 +105,9 @@ export default {
     levelupCardsCount: function () {
       const ret = this.$store.getters['ccard/levelupCards'];
       return ret ? ret.length : 0;
+    },
+    online: function () {
+      return this.$store.getters['env/online'];
     },
     sdcCardsCount: function () {
       const ret = this.$store.getters['ccard/sdcCards'];
@@ -150,26 +155,20 @@ export default {
           this.$store.dispatch('member/show'),
           this.$store.dispatch('ccard/index'),
           this.$store.dispatch('link/index'),
+          this.$store.dispatch('notification/index'),
         ]);
+
+        // データ取得日時を設定する
+        this.$store.commit('ccard/setTakenCardsAt');
+
+        if (showDialog) {
+          this.$ons.notification.alert({
+            title: 'データ取得',
+            message: this.online ? '最新データを取得しました' : 'サーバに接続できません',
+          });
+        }
       } catch (error) {
         console.error(error);
-      } finally {
-        this.$emit('hide-loading-navigation');
-      }
-    },
-    /**
-     * ログアウトする
-     * @param answer
-     */
-    signout: async function () {
-      this.$emit('show-loading-navigation');
-      try {
-        await this.$store.dispatch('user/signout');
-        // ログインページに戻る
-        this.$emit('show-signin-page-navigation');
-      } catch (error) {
-        this.$logger.error(`[${this.$options.name}/signout] ${error}`);
-        this.$ons.notification.alert({ title: 'エラー', message: error.message });
       } finally {
         this.$emit('hide-loading-navigation');
       }
@@ -200,6 +199,15 @@ export default {
 .member-status-note {
   margin: 0.5rem 1rem;
   font-size: 0.9rem;
+}
+
+.reload-button {
+  margin: 0;
+  text-align: right;
+}
+
+.reload-button > img {
+  width: 25px;
 }
 
 .quiet-button-area {

@@ -1,5 +1,6 @@
 import api from '@/common/api';
 import conversions from '@/common/conversions';
+import log from '@/common/log';
 import storage from '@/common/local-storage';
 
 const state = {
@@ -29,14 +30,9 @@ const mutations = {
    * @param {*} response
    */
   setIndex(state, response) {
-    if (!response?.data?.data) return;
-
-    const list = [];
-    response.data.data.forEach((value) => {
-      list.push(conversions.toCamelCaseForObject(value));
-    });
-    state.links = list;
+    state.links = conversions.toCamelCaseForObjectV2(response?.data?.data || []);
     storage.setItem('links', state.links);
+    log.output(`link.setIndex`, `state.links`, state.links);
   },
 };
 

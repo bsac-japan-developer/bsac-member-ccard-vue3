@@ -104,13 +104,7 @@ const mutations = {
    * @param {*} response
    */
   setIndex(state, response) {
-    if (!response?.data?.data) return;
-
-    const list = [];
-    response.data.data.forEach((value) => {
-      list.push(conversions.toCamelCaseForObjectV2(value));
-    });
-    state.cards = list;
+    state.cards = conversions.toCamelCaseForObjectV2(response?.data?.data || []);
     storage.setItem('cards', state.cards);
     log.output(`ccard.setIndex`, `state.cards`, state.cards);
   },

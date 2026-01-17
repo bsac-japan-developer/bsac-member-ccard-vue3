@@ -5,6 +5,7 @@ import env from './modules/env';
 import link from './modules/link';
 import mail from './modules/mail';
 import member from './modules/member';
+import notification from './modules/notification';
 import user from './modules/user';
 
 export default createStore({
@@ -15,6 +16,7 @@ export default createStore({
     link,
     mail,
     member,
+    notification,
     user,
   },
 });

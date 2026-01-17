@@ -77,9 +77,7 @@ const mutations = {
    * @param {*} response
    */
   setShow(state, response) {
-    if (!response?.data?.data) return;
-
-    state.user = conversions.toCamelCaseForObjectV2(response.data.data);
+    state.user = conversions.toCamelCaseForObjectV2(response.data.data || null);
     storage.setItem('user', state.user);
   },
   /**
@@ -88,9 +86,7 @@ const mutations = {
    * @param {*} response
    */
   setSignin(state, response) {
-    if (!response?.data?.data) return;
-
-    state.user = conversions.toCamelCaseForObject(response.data.data);
+    state.user = conversions.toCamelCaseForObjectV2(response.data.data || null);
     state.auth = response.headers;
     storage.setItem('user', state.user);
     storage.setItem('auth', state.auth);

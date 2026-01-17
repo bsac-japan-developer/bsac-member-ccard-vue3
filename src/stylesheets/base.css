@@ -86,6 +86,10 @@ ons-page {
   margin-bottom: 2rem;
 }
 
+.debug {
+  border: solid 1px black;
+}
+
 .fontsize-09 {
   font-size: 0.9rem;
 }
