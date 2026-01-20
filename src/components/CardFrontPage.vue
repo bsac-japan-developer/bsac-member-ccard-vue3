@@ -33,14 +33,17 @@
     </div>
     <div id="content__footer">
       <div class="quiet-button-area">
-        <!-- <v-ons-button
-          :disabled="!canShowIncidentReportButton"
-          modifier="cta"
-          class="card-front__to-incident-report-page-button"
-          @click="toIncidentReportFrontPage"
+        <v-ons-button
+          @click="toIncidentReportInputPage"
+          modifier="cta block"
+          class="button-transition"
+          style="background-color: red"
         >
-          事故発生
-        </v-ons-button> -->
+          <div class="label-wrapper">
+            <span class="title">事故の報告をする</span>
+            <span class="arrow arrow-right"></span>
+          </div>
+        </v-ons-button>
         <!-- <p v-show="!canShowIncidentReportButton" class="member-registration-recommend-text">
           事故報告機能を使うためにはBSACメンバー登録が必要です
         </p> -->
@@ -78,6 +81,7 @@
 import { markRaw } from 'vue';
 import cardDetail from '@/components/parts/CardDetail.vue';
 import cardListPage from '@/components/CardListPage.vue';
+import incidentReportInputPage from '@/components/IncidentReportInputPage.vue';
 import splitterToolbar from '@/components/parts/SplitterToolbar.vue';
 import takenCardsAt from '@/components/parts/TakenCardsAt.vue';
 import versionCheck from '@/components/parts/VersionCheck.vue';
@@ -187,6 +191,35 @@ export default {
           },
         })
       );
+    },
+    /**
+     * 事故報告入力ページに遷移する
+     */
+    toIncidentReportInputPage: async function () {
+      this.$emit('show-loading-navigation');
+      try {
+        // 新規作成情報を取得する;
+        // データ取得処理を並列実行;
+        const results = await Promise.all([this.$store.dispatch('incidentReport/new')]);
+
+        // エラーの場合、メッセージを表示する
+        let success = true;
+        results.forEach((result, index) => {
+          success = success && result.success;
+          if (!result.success)
+            this.$ons.notification.alert({
+              title: 'メンバー変更申請データ取得',
+              message: result.message,
+            });
+        });
+
+        if (success) this.$emit('push-page-navigation', markRaw(incidentReportInputPage));
+      } catch (error) {
+        this.$logger.error(`[${this.$options.name}/toMemberRegistrationChangePage] ${error}`);
+        this.$ons.notification.alert({ title: 'エラー', message: error.message });
+      } finally {
+        this.$emit('hide-loading-navigation');
+      }
     },
   },
   name: 'CardFrontPage',

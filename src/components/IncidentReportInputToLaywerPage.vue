@@ -1,24 +1,24 @@
 <template>
   <v-ons-page>
-    <navigation-toolbar :back-label="'戻る'">メンバー登録情報変更依頼</navigation-toolbar>
-    <div id="content__header">
-      <p class="note--center">
-        BSAC事務局にメンバー情報変更を依頼します。<br />
-        変更依頼の間隔は{{ intervalHours }}時間以上空けて下さい。
-      </p>
-    </div>
+    <navigation-toolbar :back-label="'戻る'">事故報告</navigation-toolbar>
+    <div id="content__header"></div>
     <div id="content__body">
       <div class="input-area">
         <input-form :inputForms="inputForms" @get-data="onGetData"></input-form>
       </div>
     </div>
     <div id="content__footer">
-      <v-ons-button @click="confirm" class="button"> 送信する </v-ons-button>
+      <v-ons-button @click="confirm" class="button" style="background-color: red">
+        BSAC事務局に報告する
+      </v-ons-button>
     </div>
   </v-ons-page>
 </template>
 
 <script>
+import { markRaw } from 'vue';
+import incidentReportFrontPage from '@/components/IncidentReportFrontPage.vue';
+import incidentReportInputAfterPage from '@/components/IncidentReportInputAfterPage.vue';
 import inputForm from '@/components/parts/InputForm.vue';
 import navigationToolbar from '@/components/parts/NavigationToolbar.vue';
 
@@ -29,10 +29,7 @@ export default {
   },
   computed: {
     inputForms: function () {
-      return this.$store.getters['memberChangeRequest/inputForms'];
-    },
-    intervalHours: function () {
-      return this.$store.getters['memberChangeRequest/intervalHours'];
+      return this.$store.getters['incidentReport/inputForms'];
     },
   },
   created: function () {},
@@ -82,16 +79,23 @@ export default {
     submit: async function () {
       this.$emit('show-loading-navigation');
       try {
-        // メンバー変更申請依頼を登録する
-        const result = await this.$store.dispatch('memberChangeRequest/create', this.inputData);
-        this.$ons.notification.alert({
-          title: 'ダイバー登録情報変更依頼',
-          message: result.message,
-        });
+        // 事故報告を登録する
+        const result = await this.$store.dispatch('incidentReport/update', this.inputData);
+        // console.log(JSON.stringify(this.inputData));
+        // const result = { success: true, message: '送信しました' };
         // 登録成功時は入力データをクリアして一覧画面に戻る;
         if (result.success) {
           this.clearData();
-          this.$emit('pop-page-navigation');
+          this.$ons.notification.confirm({
+            title: '事故報告データ送信',
+            message: '相談内容を送信しました<br>事故報告トップページに戻ります',
+            buttonLabels: ['OK'],
+            callback: (answer) => {
+              if (answer === 0) {
+                this.$emit('replace-page-navigation', markRaw(incidentReportFrontPage));
+              }
+            },
+          });
         } else {
           this.$ons.notification.alert({ title: 'エラー', message: result.message });
         }
@@ -103,7 +107,7 @@ export default {
       }
     },
   },
-  name: 'MemberRegistrationChangePage',
+  name: 'IncidentReportInputPage',
 };
 </script>
 

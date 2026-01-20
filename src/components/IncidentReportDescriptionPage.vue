@@ -38,6 +38,7 @@
         @click="toIncidentReportInputPage"
         modifier="cta block"
         class="button-transition"
+        style="background-color: red"
       >
         <div class="label-wrapper">
           <span class="title">事故の報告をする</span>

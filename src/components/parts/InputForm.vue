@@ -71,6 +71,85 @@
               </div>
             </div>
           </div>
+          <div v-if="item.props?.inputType === 'datetime-select'">
+            <div class="inputs-side-by-side-wrapper">
+              <div>
+                <select
+                  v-model="item.value.year"
+                  @change="
+                    validate();
+                    updateDays(item.key);
+                  "
+                  :disabled="item.props?.readOnly"
+                  class="selectbox"
+                >
+                  <option v-for="year in item.props?.selections?.years" :key="year" :value="year">
+                    {{ year }}
+                  </option>
+                </select>
+                <label class="datetime-label">年</label>
+              </div>
+              <div>
+                <select
+                  v-model="item.value.month"
+                  @change="
+                    validate();
+                    updateDays(item.key);
+                  "
+                  :disabled="item.props?.readOnly"
+                  class="selectbox"
+                >
+                  <option
+                    v-for="month in item.props?.selections?.months"
+                    :key="month"
+                    :value="month"
+                  >
+                    {{ month }}
+                  </option>
+                </select>
+                <label class="datetime-label">月</label>
+              </div>
+              <div>
+                <select
+                  v-model="item.value.day"
+                  @change="validate()"
+                  :disabled="item.props?.readOnly"
+                  class="selectbox"
+                >
+                  <option v-for="day in item.props?.selections?.days" :key="day" :value="day">
+                    {{ day }}
+                  </option>
+                </select>
+                <label class="datetime-label">日</label>
+              </div>
+              <div class="datetime-select-time">
+                <v-ons-input
+                  v-model="item.value.hour"
+                  @blur="validate()"
+                  type="text"
+                  placeholder="00"
+                  class="textbox time"
+                  inputmode="numeric"
+                  maxlength="2"
+                  :disabled="item.props?.readOnly"
+                ></v-ons-input>
+                <label class="datetime-label">時</label>
+              </div>
+              <div class="datetime-select-time">
+                <v-ons-input
+                  v-model="item.value.minute"
+                  @blur="validate()"
+                  type="text"
+                  placeholder="00"
+                  class="textbox time"
+                  inputmode="numeric"
+                  maxlength="2"
+                  :disabled="item.props?.readOnly"
+                ></v-ons-input>
+                <label class="datetime-label">分</label>
+              </div>
+            </div>
+          </div>
           <div v-if="item.props?.inputType === 'destination-select'">
             <select
               v-model="item.value"
@@ -174,10 +253,22 @@
               :type="item.props?.inputType"
               :inputmode="item.props?.inputMode"
               :placeholder="item.props?.placeholder"
+              :disabled="item.props?.readOnly"
               modifier="material"
               class="textbox"
               :style="`width: ${item.props?.width || '100%'}`"
             ></v-ons-input>
+          </div>
+          <div v-if="item.props?.inputType === 'textarea'">
+            <textarea
+              v-model="item.value"
+              @blur="validate()"
+              :cols="item.props?.cols || 10"
+              :rows="item.props?.rows || 10"
+              class="textarea"
+              :disabled="item.props?.readOnly"
+            >
+            </textarea>
           </div>
           <div v-if="item.props?.inputType === 'postcode'">
             <v-ons-input
@@ -279,7 +370,10 @@ export default {
     this.inputForms
       .flatMap((group) =>
         group.inputItems
-          .filter((item) => item.props?.inputType === 'date-select')
+          .filter(
+            (item) =>
+              item.props?.inputType === 'date-select' || item.props?.inputType === 'datetime-select'
+          )
           .map((item) => item.key)
       )
       .forEach((key) => {
@@ -358,8 +452,8 @@ export default {
             event && event.target && typeof event.target.value === 'string'
               ? event.target.value
               : typeof item.value === 'string'
-              ? item.value
-              : '';
+                ? item.value
+                : '';
 
           const upper = raw.toUpperCase();
           // v-model に反映（これで画面の表示も更新されます）
@@ -371,8 +465,8 @@ export default {
             event && event.target && typeof event.target.value === 'string'
               ? event.target.value
               : typeof item.value === 'string'
-              ? item.value
-              : '';
+                ? item.value
+                : '';
 
           const lower = raw.toLowerCase();
           // v-model に反映（これで画面の表示も更新されます）
@@ -510,6 +604,12 @@ export default {
                       dateStr = `${item.value?.year}-${item.value?.month}-${item.value?.day}`;
                     acc[item.key] = dateStr;
                     break;
+                  case 'datetime-select':
+                    let datetimeStr = null;
+                    if (item.value?.year && item.value?.month && item.value?.day)
+                      datetimeStr = `${item.value?.year}-${item.value?.month}-${item.value?.day} ${item.value?.hour}:${item.value?.minute}`;
+                    acc[item.key] = datetimeStr;
+                    break;
                   case 'destination-select':
                     // destinationにセットする
                     const selection = item.props?.selections.find(
@@ -562,16 +662,35 @@ export default {
      * @param item
      */
     validateItem: function (item) {
+      let message = null;
       switch (item.validations?.type) {
         case 'date':
           return validations.validateDate({
             value: {
-              year: item.value.year,
-              month: item.value.month,
-              day: item.value.day,
+              year: item.value?.year,
+              month: item.value?.month,
+              day: item.value?.day,
             },
             requiredCheck: item.validations?.required || false,
           });
+        case 'datetime':
+          message = validations.validateDate({
+            value: {
+              year: item.value?.year,
+              month: item.value?.month,
+              day: item.value?.day,
+            },
+            requiredCheck: item.validations?.required || false,
+          });
+          if (!message) {
+            return validations.validateTime({
+              value: {
+                hour: item.value?.hour,
+                minute: item.value?.minute,
+              },
+              requiredCheck: item.validations?.required || false,
+            });
+          }
         case 'decimal':
           return validations.validateDecimal({
             value: item.value,
@@ -611,7 +730,7 @@ export default {
             numericHyphenCheck: item.validations?.numericHyphenCheck || false,
           });
         case 'timespan':
-          let message = validations.validateTime({
+          message = validations.validateTime({
             value: item.value.from,
             requiredCheck: item.validations?.required || false,
           });
@@ -727,5 +846,27 @@ export default {
 .timespan-wrapper > .datetime-label {
   margin: 0 0.5rem 0.5rem 0.5rem;
   font-size: 1rem;
+}
+
+.datetime-select-time {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.datetime-select-time > .textbox.time {
+  width: 4rem;
+  font-size: 1.2rem;
+}
+
+.datetime-select-time > .datetime-label {
+  align-self: center;
+  margin: 0 0.25rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.textarea {
+  font-size: 1rem;
+  line-height: 1rem;
 }
 </style>

@@ -1,12 +1,15 @@
 <template>
   <v-ons-page>
     <splitter-toolbar :title="'事故報告'"></splitter-toolbar>
-    <div id="content__header"></div>
+    <div id="content__header">
+      <div style="margin-bottom: 1.5rem"></div>
+    </div>
     <div id="content__body">
       <v-ons-button
         @click="toIncidentReportInputPage"
         modifier="cta block"
         class="button-transition"
+        style="background-color: red"
       >
         <div class="label-wrapper">
           <span class="title">事故の報告をする</span>
@@ -82,8 +85,31 @@ export default {
     /**
      * 事故の報告をするページに遷移する
      */
-    toIncidentReportInputPage: function () {
-      this.$emit('push-page-navigation', markRaw(incidentReportInputPage));
+    toIncidentReportInputPage: async function () {
+      this.$emit('show-loading-navigation');
+      try {
+        // 新規作成用データを取得する
+        // データ取得処理を並列実行
+        const results = await Promise.all([this.$store.dispatch('incidentReport/new')]);
+
+        // エラーの場合、メッセージを表示する
+        let success = true;
+        results.forEach((result, index) => {
+          success = success && result.success;
+          if (!result.success)
+            this.$ons.notification.alert({
+              title: '事故報告データ取得',
+              message: result.message,
+            });
+        });
+
+        if (success) this.$emit('push-page-navigation', markRaw(incidentReportInputPage));
+      } catch (error) {
+        this.$logger.error(`[${this.$options.name}/toMemberRegistrationChangePage] ${error}`);
+        this.$ons.notification.alert({ title: 'エラー', message: error.message });
+      } finally {
+        this.$emit('hide-loading-navigation');
+      }
     },
   },
   name: 'IncidentReportFrontPage',
