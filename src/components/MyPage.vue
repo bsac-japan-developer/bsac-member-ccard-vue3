@@ -112,7 +112,7 @@
         class="button-transition"
       >
         <div class="label-wrapper">
-          <span class="title">メンバー登録情報の変更（未実装）</span>
+          <span class="title">メンバー登録情報の変更</span>
           <span class="arrow arrow-right"></span>
         </div>
       </v-ons-button>
@@ -179,22 +179,20 @@ export default {
     toMemberRegistrationChangePage: async function () {
       this.$emit('show-loading-navigation');
       try {
-        // 新規作成情報を取得する
-        // データ取得処理を並列実行
-        // const results = await Promise.all([
-        //   this.$store.dispatch('diverRegistrationChangeRequest/new'),
-        // ]);
+        // 新規作成情報を取得する;
+        // データ取得処理を並列実行;
+        const results = await Promise.all([this.$store.dispatch('memberChangeRequest/new')]);
 
         // エラーの場合、メッセージを表示する
         let success = true;
-        // results.forEach((result, index) => {
-        //   success = success && result.success;
-        //   if (!result.success)
-        //     this.$ons.notification.alert({
-        //       title: 'ダイバー変更申請データ取得',
-        //       message: result.message,
-        //     });
-        // });
+        results.forEach((result, index) => {
+          success = success && result.success;
+          if (!result.success)
+            this.$ons.notification.alert({
+              title: 'メンバー変更申請データ取得',
+              message: result.message,
+            });
+        });
 
         if (success) this.$emit('push-page-navigation', markRaw(memberRegistrationChangePage));
       } catch (error) {

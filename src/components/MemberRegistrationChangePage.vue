@@ -3,14 +3,14 @@
     <navigation-toolbar :back-label="'戻る'">メンバー登録情報変更依頼</navigation-toolbar>
     <div id="content__header">
       <p class="note--center">
-        BSAC事務局にユーザー情報変更を依頼します。<br />
+        BSAC事務局にメンバー情報変更を依頼します。<br />
         変更依頼の間隔は{{ intervalHours }}時間以上空けて下さい。
       </p>
     </div>
     <div id="content__body">
-      <!-- <div class="input-area">
+      <div class="input-area">
         <input-form :inputForms="inputForms" @get-data="onGetData"></input-form>
-      </div> -->
+      </div>
     </div>
     <div id="content__footer">
       <v-ons-button @click="confirm" class="button"> 送信する </v-ons-button>
@@ -29,10 +29,10 @@ export default {
   },
   computed: {
     inputForms: function () {
-      // return this.$store.getters['memberRegistrationChangeRequest/inputForms'];
+      return this.$store.getters['memberChangeRequest/inputForms'];
     },
     intervalHours: function () {
-      return 9999; // this.$store.getters['memberRegistrationChangeRequest/intervalHours'];
+      return this.$store.getters['memberChangeRequest/intervalHours'];
     },
   },
   created: function () {},
@@ -83,11 +83,7 @@ export default {
       this.$emit('show-loading-navigation');
       try {
         // ダイバーコース申込送信依頼に登録する
-        // const result = await this.$store.dispatch(
-        //   'memberRegistrationChangeRequest/create',
-        //   this.inputData
-        // );
-        const result = { success: true, message: '送信しました' };
+        const result = await this.$store.dispatch('memberChangeRequest/create', this.inputData);
         this.$ons.notification.alert({
           title: 'ダイバー登録情報変更依頼',
           message: result.message,

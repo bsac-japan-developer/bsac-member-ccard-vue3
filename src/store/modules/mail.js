@@ -18,7 +18,7 @@ const actions = {
       config: {},
       data: payload,
       dispatch,
-      endpoint: `api/v2/diver_app/mails/`,
+      endpoint: `api/v2/member_app/mails/`,
       rootGetters,
       setters: [],
     });
