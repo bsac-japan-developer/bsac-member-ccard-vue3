@@ -200,36 +200,13 @@ export default {
      * 事故報告入力ページに遷移する
      */
     toIncidentReportInputPage: async function () {
-      this.$emit('show-loading-navigation');
-      try {
-        // 新規作成情報を取得する;
-        // データ取得処理を並列実行;
-        const results = await Promise.all([this.$store.dispatch('incidentReport/new')]);
-
-        // エラーの場合、メッセージを表示する
-        let success = true;
-        results.forEach((result, index) => {
-          success = success && result.success;
-          if (!result.success)
-            this.$ons.notification.alert({
-              title: 'メンバー変更申請データ取得',
-              message: result.message,
-            });
-        });
-
-        if (success) this.$emit('push-page-navigation', markRaw(incidentReportInputPage));
-      } catch (error) {
-        this.$logger.error(`[${this.$options.name}/toMemberRegistrationChangePage] ${error}`);
-        this.$ons.notification.alert({ title: 'エラー', message: error.message });
-      } finally {
-        this.$emit('hide-loading-navigation');
-      }
+      this.$emit('show-incident-report-page-navigation');
     },
     /**
      * お知らせ一覧ページに遷移する
      */
     toNotificationListPage: function () {
-      this.$emit('push-page-navigation', markRaw(notificationListPage));
+      this.$emit('show-notification-page-navigation');
     },
   },
   name: 'CardFrontPage',

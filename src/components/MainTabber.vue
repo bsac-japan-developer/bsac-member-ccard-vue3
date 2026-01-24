@@ -7,7 +7,9 @@
       :visible="isAuthenticated"
       v-model:active-index="activeIndex"
       @hide-loading-tabber="hideLoading"
+      @show-incident-report-page-tabber="showIncidentReportPage"
       @show-loading-tabber="showLoading"
+      @show-notification-page-tabber="showNotificationPage"
       @show-signin-page-tabber="showSigninPage"
       @show-main-page-tabber="showMainPage"
     >
@@ -103,6 +105,12 @@ export default {
       return this.$ons.platform.isAndroid();
     },
     /**
+     * 事故報告ページを表示する
+     */
+    showIncidentReportPage: function () {
+      this.activeIndex = 1;
+    },
+    /**
      * ローディング画面を表示する
      */
     showLoading: function () {
@@ -114,6 +122,12 @@ export default {
     showMainPage: async function () {
       this.activeIndex = 0;
       this.tabs[0].page = markRaw(cardNavigation);
+    },
+    /**
+     * お知らせ一覧ページを表示する
+     */
+    showNotificationPage: function () {
+      this.activeIndex = 2;
     },
     /**
      * ログインページを表示する

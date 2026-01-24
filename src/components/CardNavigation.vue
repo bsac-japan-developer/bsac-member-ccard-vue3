@@ -6,7 +6,9 @@
     @pop-page-navigation="pageStack = pageStack.slice(0, -1)"
     @push-page-navigation="pageStack = [...pageStack, $event]"
     @replace-page-navigation="pageStack = [...pageStack.slice(0, -1), $event]"
+    @show-incident-report-page-navigation="showIncidentReportPage"
     @show-loading-navigation="showLoading"
+    @show-notification-page-navigation="showNotificationPage"
     @show-signin-page-navigation="showSigninPage"
   ></v-ons-navigator>
 </template>
@@ -30,10 +32,22 @@ export default {
       this.$emit('hide-loading-tabber');
     },
     /**
+     * 事故報告ページを表示する
+     */
+    showIncidentReportPage: function () {
+      this.$emit('show-incident-report-page-tabber');
+    },
+    /**
      * ローディング画面を表示する
      */
     showLoading: function () {
       this.$emit('show-loading-tabber');
+    },
+    /**
+     * お知らせ一覧ページを表示する
+     */
+    showNotificationPage: function () {
+      this.$emit('show-notification-page-tabber');
     },
     /**
      * ログインページを表示する
