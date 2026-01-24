@@ -90,6 +90,31 @@ ons-page {
   border: solid 1px black;
 }
 
+.expandable-area {
+  margin: 5%;
+}
+
+.expandable-content {
+  padding: 0;
+  font-size: 0.8rem;
+}
+
+.expandable-content ol {
+  padding: 0 0.5rem 0 2rem;
+  margin-left: 0;
+  font-size: 0.9rem;
+}
+
+.expandable-content ol > li {
+  margin-bottom: 0.5rem;
+}
+
+.expandable-content ol > li > ul {
+  padding: 0 0.5rem 0 1rem;
+  margin-left: 0;
+  font-size: 0.9rem;
+}
+
 .fontsize-09 {
   font-size: 0.9rem;
 }

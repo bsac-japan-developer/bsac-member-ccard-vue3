@@ -104,6 +104,51 @@
           </v-ons-list-item>
         </v-ons-list>
       </div>
+      <div class="expandable-area" style="margin: 2.5%">
+        <v-ons-list modifier="noborder">
+          <v-ons-list-item modifier="nodivider" expandable :expanded.sync="false">
+            <div>アプリ情報</div>
+            <div class="expandable-content" style="margin-bottom: 1rem">
+              <v-ons-list modifier="inset">
+                <v-ons-list-header>
+                  <span class="list-header">アプリ環境情報</span>
+                </v-ons-list-header>
+                <v-ons-list-item modifier="longdivider">
+                  <div class="list-item-container">
+                    <span class="list-item-title">アプリバージョン：</span>
+                    <span class="list-item-value--row-1-col-2">
+                      {{ envVersion }}
+                    </span>
+                  </div>
+                </v-ons-list-item>
+                <v-ons-list-item modifier="longdivider">
+                  <div class="list-item-container">
+                    <span class="list-item-title">OSバージョン：</span>
+                    <span class="list-item-value--row-1-col-2">
+                      {{
+                        deviceInfo?.platform
+                          ? `${deviceInfo?.platform} ${deviceInfo?.version}`
+                          : `${osVersion}`
+                      }}
+                    </span>
+                  </div>
+                </v-ons-list-item>
+                <v-ons-list-item modifier="longdivider">
+                  <div class="list-item-container">
+                    <span class="list-item-title">機種内部名：</span>
+                    <span class="list-item-value--row-1-col-2">
+                      {{ deviceInfo?.model }}
+                      <span v-if="deviceInfo?.model" style="display: block; font-size: 0.7rem">
+                        ※ 機種名とは異なります
+                      </span>
+                    </span>
+                  </div>
+                </v-ons-list-item>
+              </v-ons-list>
+            </div>
+          </v-ons-list-item>
+        </v-ons-list>
+      </div>
     </div>
     <div id="content__footer">
       <v-ons-button
@@ -134,9 +179,19 @@ export default {
     splitterToolbar,
   },
   computed: {
+    envVersion: function () {
+      return this.$store.getters['env/version'];
+    },
     member: function () {
       return this.$store.getters['member/member'] || {};
     },
+  },
+  created: function () {},
+  data() {
+    return {
+      osVersion: '',
+      deviceInfo: {},
+    };
   },
   methods: {
     /**
@@ -151,6 +206,88 @@ export default {
           if (answer === 1) this.signout();
         },
       });
+    },
+    /**
+     *
+     */
+    getDeviceInfoFromBrowser: function () {
+      // console.log('Getting device info from browser...');
+      const userAgent = navigator.userAgent;
+      // console.log('User Agent:', userAgent);
+
+      let osVersion = 'Browser';
+
+      if (/iPad|iPhone|iPod/.test(userAgent)) {
+        const match = userAgent.match(/OS (\d+_\d+_?\d*)/);
+        if (match) {
+          osVersion = `iOS ${match[1].replace(/_/g, '.')}`;
+        } else {
+          osVersion = 'iOS (version unknown)';
+        }
+      } else if (/Android/.test(userAgent)) {
+        const match = userAgent.match(/Android (\d+\.?\d*\.?\d*)/);
+        if (match) {
+          osVersion = `Android ${match[1]}`;
+        } else {
+          osVersion = 'Android (version unknown)';
+        }
+      }
+
+      this.osVersion = osVersion;
+      // console.log('Detected OS version:', osVersion);
+    },
+    /**
+     *
+     */
+    initializeDeviceInfo: function () {
+      // console.log('Initializing device info...');
+
+      // Cordova環境かどうかをチェック
+      if (typeof cordova !== 'undefined') {
+        // console.log('Cordova environment detected, waiting for deviceready...');
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+
+        // タイムアウト処理（5秒後にフォールバック）
+        setTimeout(() => {
+          if (!this.osVersion) {
+            // console.log('Device ready timeout, falling back to browser detection');
+            this.getDeviceInfoFromBrowser();
+          }
+        }, 5000);
+      } else {
+        // console.log('Browser environment detected, using browser detection');
+        this.getDeviceInfoFromBrowser();
+      }
+    },
+    /**
+     *
+     */
+    onDeviceReady: function () {
+      // console.log('Device ready event fired');
+      try {
+        if (typeof device !== 'undefined') {
+          // console.log('Device info available:');
+          // console.log('- cordova:', device.cordova);
+          // console.log('- version:', device.version);
+          // console.log('- platform:', device.platform);
+          // console.log('- model:', device.model);
+
+          this.osVersion = device.version;
+          this.deviceInfo = {
+            cordova: device.cordova,
+            platform: device.platform,
+            version: device.version,
+            model: device.model,
+            manufacturer: device.manufacturer || 'Unknown',
+          };
+        } else {
+          // console.warn('device object still not available after deviceready');
+          this.getDeviceInfoFromBrowser();
+        }
+      } catch (error) {
+        // console.error('Error in onDeviceReady:', error);
+        this.getDeviceInfoFromBrowser();
+      }
     },
     /**
      * ログアウトする
@@ -202,6 +339,9 @@ export default {
         this.$emit('hide-loading-navigation');
       }
     },
+  },
+  mounted: function () {
+    this.initializeDeviceInfo();
   },
 };
 </script>
