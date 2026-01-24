@@ -22,6 +22,13 @@ const getters = {
   },
   notification: (state) => state.notification || {},
   notifications: (state) => state.notifications || [],
+  /**
+   * 未読数を取得する
+   * @param {*} state
+   */
+  unReadCount: (state) => {
+    return state.notifications.filter((notification) => !notification?.hasRead)?.length;
+  },
 };
 
 const mutations = {

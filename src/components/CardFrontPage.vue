@@ -3,14 +3,13 @@
     <splitter-toolbar :title="'ランク'"></splitter-toolbar>
     <div id="content__header">
       <version-check ref="versionCheck" />
-      <!-- <v-ons-button
+      <v-ons-button
         modifier="quiet"
-        v-show="notificationUnReadCount"
         class="unread-notification-button"
-        @click="toNotificationFrontPage"
+        @click="toNotificationListPage"
       >
         未読のお知らせが {{ notificationUnReadCount }} 件あります
-      </v-ons-button> -->
+      </v-ons-button>
       <taken-cards-at></taken-cards-at>
     </div>
     <div id="content__body">
@@ -35,6 +34,7 @@
       <div class="quiet-button-area">
         <v-ons-button
           @click="toIncidentReportInputPage"
+          :disabled="!(this.isActive || this.isNegative)"
           modifier="cta block"
           class="button-transition"
           style="background-color: red"
@@ -44,9 +44,9 @@
             <span class="arrow arrow-right"></span>
           </div>
         </v-ons-button>
-        <!-- <p v-show="!canShowIncidentReportButton" class="member-registration-recommend-text">
-          事故報告機能を使うためにはBSACメンバー登録が必要です
-        </p> -->
+        <div v-if="!(this.isActive || this.isNegative)" class="member-registration-recommend">
+          <p class="text-style">事故報告機能を使うためには<br />BSACメンバー登録が必要です</p>
+        </div>
         <p v-if="levelupCardsCount !== 0 || sdcCardsCount !== 0">■その他のカード / Other Cards</p>
         <v-ons-button
           v-if="levelupCardsCount !== 0"
@@ -82,6 +82,7 @@ import { markRaw } from 'vue';
 import cardDetail from '@/components/parts/CardDetail.vue';
 import cardListPage from '@/components/CardListPage.vue';
 import incidentReportInputPage from '@/components/IncidentReportInputPage.vue';
+import notificationListPage from '@/components/NotificationListPage.vue';
 import splitterToolbar from '@/components/parts/SplitterToolbar.vue';
 import takenCardsAt from '@/components/parts/TakenCardsAt.vue';
 import versionCheck from '@/components/parts/VersionCheck.vue';
@@ -109,6 +110,9 @@ export default {
     levelupCardsCount: function () {
       const ret = this.$store.getters['ccard/levelupCards'];
       return ret ? ret.length : 0;
+    },
+    notificationUnReadCount: function () {
+      return this.$store.getters['notification/unReadCount'];
     },
     online: function () {
       return this.$store.getters['env/online'];
@@ -221,6 +225,12 @@ export default {
         this.$emit('hide-loading-navigation');
       }
     },
+    /**
+     * お知らせ一覧ページに遷移する
+     */
+    toNotificationListPage: function () {
+      this.$emit('push-page-navigation', markRaw(notificationListPage));
+    },
   },
   name: 'CardFrontPage',
 };
@@ -234,6 +244,20 @@ export default {
   font-size: 0.9rem;
 }
 
+.member-registration-recommend {
+  margin: 0.25rem 1rem 1rem 1rem;
+  padding: 1rem;
+  width: 80%;
+  border: 0.1rem solid red;
+}
+
+.member-registration-recommend > .text-style {
+  margin: 0 auto;
+  font-size: 1rem;
+  font-weight: 500;
+  color: red;
+}
+
 .reload-button {
   margin: 0;
   text-align: right;
@@ -245,5 +269,13 @@ export default {
 
 .quiet-button-area {
   margin: 0 0 5% 0;
+}
+
+.unread-notification-button {
+  margin: 0;
+  z-index: 10;
+  color: red;
+  font-size: 1rem;
+  text-decoration: underline;
 }
 </style>
