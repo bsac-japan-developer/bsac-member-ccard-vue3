@@ -18,7 +18,6 @@
 <script>
 import { markRaw } from 'vue';
 import incidentReportFrontPage from '@/components/IncidentReportFrontPage.vue';
-import incidentReportInputAfterPage from '@/components/IncidentReportInputAfterPage.vue';
 import inputForm from '@/components/parts/InputForm.vue';
 import navigationToolbar from '@/components/parts/NavigationToolbar.vue';
 
@@ -92,6 +91,7 @@ export default {
             buttonLabels: ['OK'],
             callback: (answer) => {
               if (answer === 0) {
+                // 事故報告トップページに遷移する
                 this.$emit('replace-page-navigation', markRaw(incidentReportFrontPage));
               }
             },

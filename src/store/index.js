@@ -8,6 +8,7 @@ import mail from './modules/mail';
 import member from './modules/member';
 import memberChangeRequest from './modules/member-change-request';
 import notification from './modules/notification';
+import sms from './modules/sms';
 import user from './modules/user';
 
 export default createStore({
@@ -21,6 +22,7 @@ export default createStore({
     member,
     memberChangeRequest,
     notification,
+    sms,
     user,
   },
 });
