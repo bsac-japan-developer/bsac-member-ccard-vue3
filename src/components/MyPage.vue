@@ -144,6 +144,14 @@
                     </span>
                   </div>
                 </v-ons-list-item>
+                <v-ons-list-item modifier="longdivider">
+                  <div class="list-item-container">
+                    <span class="list-item-title">トークン：</span>
+                    <span class="list-item-value--row-1-col-2">
+                      {{ fcmToken }}
+                    </span>
+                  </div>
+                </v-ons-list-item>
               </v-ons-list>
             </div>
           </v-ons-list-item>
@@ -191,6 +199,7 @@ export default {
     return {
       osVersion: '',
       deviceInfo: {},
+      fcmToken: null,
     };
   },
   methods: {
@@ -280,6 +289,8 @@ export default {
             model: device.model,
             manufacturer: device.manufacturer || 'Unknown',
           };
+          // FCM トークン設定（deviceready 後に実行）
+          if (this.setupFcmToken) this.setupFcmToken();
         } else {
           // console.warn('device object still not available after deviceready');
           this.getDeviceInfoFromBrowser();
@@ -339,9 +350,39 @@ export default {
         this.$emit('hide-loading-navigation');
       }
     },
+    /**
+     * FCM トークンを取得して画面に反映する
+     */
+    setupFcmToken: function () {
+      if (!(this.$ons.platform.isIOS() || this.$ons.platform.isAndroid())) return;
+      if (!window.FirebasePlugin || !window.FirebasePlugin.getToken) return;
+
+      try {
+        window.FirebasePlugin.getToken(
+          (token) => {
+            this.fcmToken = token;
+            console.log('FCM token:', token);
+          },
+          (err) => {
+            console.error('getToken error', err);
+          }
+        );
+
+        if (window.FirebasePlugin.onTokenRefresh) {
+          window.FirebasePlugin.onTokenRefresh((token) => {
+            this.fcmToken = token;
+            console.log('token refreshed:', token);
+          });
+        }
+      } catch (e) {
+        console.error('setupFcmToken error', e);
+      }
+    },
   },
   mounted: function () {
     this.initializeDeviceInfo();
+    // マウント時にもトークン取得を試みる（ブラウザ/一部の環境用）
+    if (this.setupFcmToken) this.setupFcmToken();
   },
 };
 </script>

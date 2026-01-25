@@ -42,6 +42,7 @@ export default {
       pages: [
         { id: 'cardNavigation', name: 'ランク', tabIndex: 0 },
         { id: 'incidentReportNavigation', name: '事故報告', tabIndex: 1 },
+        // { id: 'cardApplicationNavigation', name: '申請', tabIndex: 2 },
         { id: 'notificationNavigation', name: 'お知らせ', tabIndex: 2 },
         { id: 'linkNavigation', name: '各種リンク', tabIndex: 3 },
         { id: 'myPageNavigation', name: 'マイページ', tabIndex: 4 },

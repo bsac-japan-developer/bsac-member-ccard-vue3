@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 import appInformation from './modules/app-information';
 import ccard from './modules/ccard';
+import ccardApplication from './modules/ccard-application';
 import env from './modules/env';
 import incidentReport from './modules/incident-report';
 import link from './modules/link';
@@ -15,6 +16,7 @@ export default createStore({
   modules: {
     appInformation,
     ccard,
+    ccardApplication,
     env,
     incidentReport,
     link,

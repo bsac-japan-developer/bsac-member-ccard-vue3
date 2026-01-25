@@ -20,6 +20,7 @@
 
 <script>
 import { markRaw } from 'vue';
+// import cardApplicationNavigation from '@/components/CardApplicationNavigation.vue';
 import cardNavigation from '@/components/CardNavigation.vue';
 import incidentReportNavigation from '@/components/IncidentReportNavigation.vue';
 import linkNavigation from '@/components/LinkNavigation.vue';
@@ -30,6 +31,7 @@ import signinNavigation from '@/components/SigninNavigation.vue';
 
 export default {
   components: {
+    // cardApplicationNavigation,
     cardNavigation,
     incidentReportNavigation,
     linkNavigation,
@@ -73,6 +75,11 @@ export default {
           label: '事故報告',
           page: markRaw(incidentReportNavigation),
         },
+        // {
+        //   icon: this.isAndroid() ? null : 'ion-ios-paper',
+        //   label: '申請',
+        //   page: markRaw(cardApplicationNavigation),
+        // },
         {
           icon: this.isAndroid() ? null : 'ion-ios-volume-high',
           label: 'お知らせ',

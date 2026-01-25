@@ -27,29 +27,42 @@
     </div>
     <div id="content__footer">
       <v-ons-button @click="submit" class="button">ログイン</v-ons-button>
-    </div>
-    <div>
-      <p class="note">
-        <ul>
-          <li>
-            ログインID・パスワードを紛失・お忘れの方は
-            <v-ons-button
-              modifier="quiet"
-              @click="openExternalSite('https://www.bsac.co.jp/contact/')"
-              style="display: inline; margin: 0; padding: 0"
-            >
-              こちら
-            </v-ons-button>
-            へお問合せください。
-          </li>
-          <li>ITセンター・ダイブセンターアカウントではログインすることができません。</li>
-        </ul>
-      </p>
+      <div>
+        <p class="note">
+          <ul>
+            <li>
+              ログインID・パスワードを紛失・お忘れの方は
+              <v-ons-button
+                modifier="quiet"
+                @click="openExternalSite('https://www.bsac.co.jp/contact/')"
+                style="display: inline; margin: 0; padding: 0"
+              >
+                こちら
+              </v-ons-button>
+              へお問合せください。
+            </li>
+            <li>ITセンター・ダイブセンターアカウントではログインすることができません。</li>
+          </ul>
+        </p>
+      </div>
+      <v-ons-button
+        @click="toCardApplicationInputPage"
+        modifier="cta block"
+        class="button-transition"
+      >
+        <div class="label-wrapper">
+          <span class="title">ランク申請をする</span>
+          <span class="arrow arrow-right"></span>
+        </div>
+      </v-ons-button>
     </div>
   </v-ons-page>
 </template>
 
 <script>
+import { markRaw } from 'vue';
+import cardApplicationInputPage from '@/components/CardApplicationInputPage.vue';
+
 export default {
   components: {},
   computed: {
@@ -126,6 +139,35 @@ export default {
         }
       } catch (error) {
         this.$logger.error(`[${this.$options.name}/submit] ${error}`);
+        this.$ons.notification.alert({ title: 'エラー', message: error.message });
+      } finally {
+        this.$emit('hide-loading-navigation');
+      }
+    },
+    /**
+     * ランク申請ページに遷移する
+     */
+    toCardApplicationInputPage: async function () {
+      this.$emit('show-loading-navigation');
+      try {
+        // 新規作成情報を取得する;
+        // データ取得処理を並列実行;
+        const results = await Promise.all([this.$store.dispatch('ccardApplication/new')]);
+
+        // エラーの場合、メッセージを表示する
+        let success = true;
+        results.forEach((result, index) => {
+          success = success && result.success;
+          if (!result.success)
+            this.$ons.notification.alert({
+              title: 'ランク申請データ取得',
+              message: result.message,
+            });
+        });
+
+        if (success) this.$emit('push-page-navigation', markRaw(cardApplicationInputPage));
+      } catch (error) {
+        this.$logger.error(`[${this.$options.name}/toCardApplicationInputPage] ${error}`);
         this.$ons.notification.alert({ title: 'エラー', message: error.message });
       } finally {
         this.$emit('hide-loading-navigation');

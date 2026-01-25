@@ -4,6 +4,7 @@
     <div id="content__header">
       <version-check ref="versionCheck" />
       <v-ons-button
+        v-if="notificationUnReadCount > 0"
         modifier="quiet"
         class="unread-notification-button"
         @click="toNotificationListPage"
@@ -33,6 +34,16 @@
     <div id="content__footer">
       <div class="quiet-button-area">
         <v-ons-button
+          @click="toCardApplicationInputPage"
+          modifier="cta block"
+          class="button-transition"
+        >
+          <div class="label-wrapper">
+            <span class="title">ランク申請をする</span>
+            <span class="arrow arrow-right"></span>
+          </div>
+        </v-ons-button>
+        <v-ons-button
           @click="toIncidentReportInputPage"
           :disabled="!(this.isActive || this.isNegative)"
           modifier="cta block"
@@ -45,7 +56,9 @@
           </div>
         </v-ons-button>
         <div v-if="!(this.isActive || this.isNegative)" class="member-registration-recommend">
-          <p class="text-style">事故報告機能を使うためには<br />BSACメンバー登録が必要です</p>
+          <p class="text-style">
+            事故報告機能、ランク申請機能を使うためにはBSACメンバー登録が必要です
+          </p>
         </div>
         <p v-if="levelupCardsCount !== 0 || sdcCardsCount !== 0">■その他のカード / Other Cards</p>
         <v-ons-button
@@ -80,9 +93,8 @@
 <script>
 import { markRaw } from 'vue';
 import cardDetail from '@/components/parts/CardDetail.vue';
+import cardApplicationInputPage from '@/components/CardApplicationInputPage.vue';
 import cardListPage from '@/components/CardListPage.vue';
-import incidentReportInputPage from '@/components/IncidentReportInputPage.vue';
-import notificationListPage from '@/components/NotificationListPage.vue';
 import splitterToolbar from '@/components/parts/SplitterToolbar.vue';
 import takenCardsAt from '@/components/parts/TakenCardsAt.vue';
 import versionCheck from '@/components/parts/VersionCheck.vue';
@@ -177,6 +189,35 @@ export default {
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        this.$emit('hide-loading-navigation');
+      }
+    },
+    /**
+     * ランク申請ページに遷移する
+     */
+    toCardApplicationInputPage: async function () {
+      this.$emit('show-loading-navigation');
+      try {
+        // 新規作成情報を取得する;
+        // データ取得処理を並列実行;
+        const results = await Promise.all([this.$store.dispatch('ccardApplication/new')]);
+
+        // エラーの場合、メッセージを表示する
+        let success = true;
+        results.forEach((result, index) => {
+          success = success && result.success;
+          if (!result.success)
+            this.$ons.notification.alert({
+              title: 'ランク申請データ取得',
+              message: result.message,
+            });
+        });
+
+        if (success) this.$emit('push-page-navigation', markRaw(cardApplicationInputPage));
+      } catch (error) {
+        this.$logger.error(`[${this.$options.name}/toCardApplicationInputPage] ${error}`);
+        this.$ons.notification.alert({ title: 'エラー', message: error.message });
       } finally {
         this.$emit('hide-loading-navigation');
       }

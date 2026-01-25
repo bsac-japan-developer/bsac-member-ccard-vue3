@@ -71,7 +71,7 @@
           </tr>
           <tr>
             <td class="ccard-table-title-column">Member Status.</td>
-            <td class="ccard-table-value-column" style="color: white; font-weight: bold">
+            <td class="ccard-table-value-column" style="font-weight: bold">
               {{ memberStatus }}
             </td>
           </tr>
