@@ -40,6 +40,12 @@ export default {
       this.$emit('show-loading-tabber');
     },
   },
+  mounted: function () {
+    if (this.$ons.platform.isIOS() || this.$ons.platform.isAndroid()) {
+      // プッシュ通知用トピックを登録する
+      window.FirebasePlugin.subscribe(this.$store.getters['env/topic'], null, null);
+    }
+  },
   name: 'LinkNavigation',
   watch: {
     isAuthenticated(newVal, oldVal) {

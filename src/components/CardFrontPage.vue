@@ -191,6 +191,13 @@ export default {
         console.error(error);
       } finally {
         this.$emit('hide-loading-navigation');
+
+        // アプリバージョンを更新する
+        try {
+          await this.$store.dispatch('user/update', {
+            app_version: this.$store.getters['env/version'],
+          });
+        } catch (error) {}
       }
     },
     /**

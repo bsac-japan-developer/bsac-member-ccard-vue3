@@ -32,3 +32,12 @@ app.mount('#app');
 app.config.errorHandler = (err, vm, info) => {
   return false;
 };
+
+document.addEventListener(
+  'deviceready',
+  function () {
+    // プッシュ通知のパーミッションをリクエスト
+    window.FirebasePlugin.grantPermission();
+  },
+  false
+);

@@ -1,6 +1,7 @@
 import api from '@/common/api';
 import conversions from '@/common/conversions';
 import CryptoJS from 'crypto-js';
+import { format } from 'date-fns';
 import storage from '@/common/local-storage';
 
 const SECRET_KEY = 'SwQHnmoSO131bV7vk0oISWVScXJ1YIXBre8jrKuFxkArO6MBqxXwSA41fm7Sav7W';
@@ -147,6 +148,26 @@ const actions = {
       endpoint: 'api/v1/partner_auth/sign_out',
       rootGetters,
       setters: ['user/clearData'],
+    });
+  },
+  /**
+   * 更新する
+   * @param {*} param0
+   * @param {*} input
+   * @returns
+   */
+  // eslint-disable-next-line no-empty-pattern
+  update({ commit, dispatch, getters, rootGetters }, input) {
+    input['updated_at'] = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
+    return api.patch({
+      commit,
+      config: {},
+      data: input,
+      dispatch,
+      endpoint: `api/v2/member_app/partner_users/${getters['user'].id}`,
+      rootGetters,
+      setters: [],
     });
   },
 };

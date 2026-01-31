@@ -47,6 +47,12 @@ export default {
       this.$emit('show-signin-page-tabber');
     },
   },
+  mounted: function () {
+    if (this.$ons.platform.isIOS() || this.$ons.platform.isAndroid()) {
+      // プッシュ通知用トピックを登録する
+      window.FirebasePlugin.subscribe(this.$store.getters['env/topic'], null, null);
+    }
+  },
   name: 'MyPageNavigation',
   watch: {
     isAuthenticated(newVal, oldVal) {

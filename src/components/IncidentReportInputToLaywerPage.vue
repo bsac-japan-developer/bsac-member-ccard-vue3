@@ -9,7 +9,7 @@
     </div>
     <div id="content__footer">
       <v-ons-button @click="confirm" class="button" style="background-color: red">
-        BSAC事務局に報告する
+        法律の専門家に相談する
       </v-ons-button>
     </div>
   </v-ons-page>

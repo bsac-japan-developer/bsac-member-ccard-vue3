@@ -351,7 +351,7 @@ export default {
       }
     },
     /**
-     * FCM トークンを取得して画面に反映する
+     * FCMトークンを取得して画面に反映する
      */
     setupFcmToken: function () {
       if (!(this.$ons.platform.isIOS() || this.$ons.platform.isAndroid())) return;
