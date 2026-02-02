@@ -25,8 +25,16 @@ const getters = {
 
     return state.cardApplications ? state.cardApplications : [];
   },
-  cardSendingDestinations: (state) =>
-    state.cardSendingDestinations ? state.cardSendingDestinations : [],
+  cardSendingDestinations: (state) => (diveCenter) => {
+    console.log(`diveCenter: ${diveCenter}`);
+    if (diveCenter === 0) {
+      return state.cardSendingDestinations.filter((destination) => {
+        return destination?.value !== 'ダイブセンター';
+      });
+    } else {
+      return state.cardSendingDestinations;
+    }
+  },
   cardSendingDestinationValue: (state) => (id) => {
     const destinations = state.cardSendingDestinations.filter((gender) => {
       return gender.id === id;

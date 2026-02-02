@@ -39,7 +39,7 @@
           class="button-transition"
         >
           <div class="label-wrapper">
-            <span class="title">ランク申請をする</span>
+            <span class="title">追加で申請をする</span>
             <span class="arrow arrow-right"></span>
           </div>
         </v-ons-button>

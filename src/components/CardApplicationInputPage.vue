@@ -637,6 +637,9 @@
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
             <span class="list-item-title"> カード返送先 </span>
+            <span v-if="input.properties.editable" class="list-item-title-note">
+              ※「不要」を選択した場合、現物カードの発行はありません。
+            </span>
             <div class="list-item-value">
               <select
                 v-model="input.deliverCardTo"
@@ -796,7 +799,9 @@ export default {
      * カード返送先リスト
      */
     cardSendingDestinations: function () {
-      return this.$store.getters['ccardApplication/cardSendingDestinations'];
+      return this.$store.getters['ccardApplication/cardSendingDestinations'](
+        this.input.diveCenterId
+      );
     },
     /**
      * クロスオーバー必須可否
