@@ -19,7 +19,7 @@ const getters = {
     switch (state.env) {
       case 0: // 本番環境
       case 2: // テスト環境
-        return true;
+      // return true;
       case 1: // 開発環境
         return false;
     }

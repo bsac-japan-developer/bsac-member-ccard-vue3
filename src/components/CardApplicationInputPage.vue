@@ -492,7 +492,8 @@
           <v-ons-list-item modifier="longdivider">
             <p class="list-item-title">メールアドレス</p>
             <span v-if="input.properties.editable" class="list-item-title-note">
-              ランク申請控えメールの送信先をご記入ください
+              ランク申請控えメールの送信先をご記入ください。<br />
+              ※BSAC Japan、所属ダイブセンター、認定インストラクターにも同じ内容が送信されます。
             </span>
             <div class="list-item-value">
               <v-ons-input
