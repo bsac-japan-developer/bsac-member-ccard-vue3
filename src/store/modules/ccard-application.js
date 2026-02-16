@@ -4,6 +4,7 @@ import log from '@/common/log';
 import storage from '@/common/local-storage';
 
 const state = {
+  bloodTypes: [],
   cardApplication: {},
   cardApplications: [],
   cardSendingDestinations: [],
@@ -11,6 +12,7 @@ const state = {
   genders: [],
   idPhoto: null,
   input: {},
+  memberPledge: {},
   members: [],
   rankGroups: [],
   ranks: [],
@@ -18,12 +20,12 @@ const state = {
 };
 
 const getters = {
-  cardApplication: (state) => (state.cardApplication ? state.cardApplication : {}),
+  bloodTypes: (state) => state.bloodTypes || [],
+  cardApplication: (state) => state.cardApplication || {},
   cardApplications: (state) => {
     if (Array.isArray(state.cardApplications) && state.cardApplications.length === 0)
       state.cardApplications = storage.getItem('card-applications');
-
-    return state.cardApplications ? state.cardApplications : [];
+    return state.cardApplications || [];
   },
   cardSendingDestinations: (state) => (diveCenter) => {
     console.log(`diveCenter: ${diveCenter}`);
@@ -63,7 +65,7 @@ const getters = {
     if (members.length < 1) return null;
     return members[0].name;
   },
-  genders: (state) => (state.genders ? state.genders : []),
+  genders: (state) => state.genders || [],
   genderValue: (state) => (id) => {
     const genders = state.genders.filter((gender) => {
       return gender.id === id;
@@ -75,7 +77,7 @@ const getters = {
     if (!state.idPhoto) return;
     return state.idPhoto.replace(/data:image\/(jpg|jpeg);base64,/g, '').trim();
   },
-  input: (state) => (state.input ? state.input : {}),
+  input: (state) => state.input || {},
   memberName: (state) => (value) => {
     if (isNaN(parseInt(value))) return null;
     const members = state.members.filter((member) => {
@@ -84,6 +86,7 @@ const getters = {
     if (members.length < 1) return null;
     return members[0].name;
   },
+  memberPledge: (state) => state.memberPledge || {},
   members: (state) => (diveCenterId) => {
     if (diveCenterId === null) return state.members; // フリーメンバーは0のため`=== null`で判定する
     const members = state.members.filter((member) => member.diveCenterId === diveCenterId);
@@ -128,6 +131,7 @@ const getters = {
         now.getMinutes()
       ).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`,
       birth_at: `${input.birthAtYear}-${input.birthAtMonth}-${input.birthAtDay}`,
+      blood_type: input.bloodType,
       certifier_member_id: input.certifierMemberId,
       certify_at: `${input.certifyAtYear}-${input.certifyAtMonth}-${input.certifyAtDay}`,
       crossover_assosiation_name: input.crossoverAssosiationName,
@@ -155,10 +159,25 @@ const getters = {
       updated_at: input.updatedAt,
     };
   },
-  searchConditions: (state) => (state.searchConditions ? state.searchConditions : {}),
+  searchConditions: (state) => state.searchConditions || {},
 };
 
 const mutations = {
+  /**
+   * 血液型データをセットする
+   * @param {*} state
+   * @param {*} response
+   */
+  setBloodTypes(state, response) {
+    if (!response?.data?.options?.blood_types) return;
+
+    const list = [];
+    response.data.options.blood_types.forEach((value) => {
+      list.push(conversions.toCamelCaseForObject(value));
+    });
+    state.bloodTypes = list;
+    log.output(`cardApplication.setBloodTypes`, `state.bloodTypes`, state.bloodTypes);
+  },
   /**
    * データをクリアする
    * @param {*} state
@@ -209,6 +228,7 @@ const mutations = {
         application?.birthAt?.split('-')?.length > 1 ? application?.birthAt?.split('-')[1] : null,
       birthAtYear:
         application?.birthAt?.split('-')?.length > 0 ? application?.birthAt?.split('-')[0] : null,
+      bloodType: application?.bloodType,
       certifierMemberId: application?.certifierMemberId,
       certifierMemberName: application?.certifierMemberName,
       certifyAtDay:
@@ -329,6 +349,15 @@ const mutations = {
    */
   setInput(state, payload) {
     state.input = payload;
+  },
+  /**
+   * メンバー誓約をセットする
+   * @param {*} state
+   * @param {*} response
+   */
+  setMemberPledge(state, response) {
+    state.memberPledge = response?.data?.member_pledge;
+    log.output(`cardApplication.memberPledge`, `state.memberPledge`, state.memberPledge);
   },
   /**
    * メンバーデータをセットする
@@ -475,11 +504,13 @@ const actions = {
       rootGetters,
       setters: [
         'clearData',
+        'setBloodTypes',
         'setDetailData',
         'setCardSendingDestinations',
         'setDiveCenters',
         'setGenders',
         'setMembers',
+        'setMemberPledge',
         'setRankGroups',
         'setRanks',
       ],

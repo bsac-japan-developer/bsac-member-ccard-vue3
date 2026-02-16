@@ -373,6 +373,25 @@
             </span>
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
+            <span class="list-item-title"> 血液型 </span>
+            <div class="list-item-value">
+              <select
+                v-model="input.bloodType"
+                @change="validate()"
+                :disabled="!input.properties.editable"
+                class="selectbox"
+                style="width: 30%; text-align-last: left"
+              >
+                <option v-for="bloodType in bloodTypes" :key="bloodType.key" :value="bloodType.key">
+                  {{ bloodType.value }}
+                </option>
+              </select>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.bloodType }}
+            </span>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
             <span class="list-item-title"> 郵便番号 </span>
             <div class="list-item-value">
               <v-ons-input
@@ -732,12 +751,19 @@ export default {
       });
     },
     /**
+     * 血液型リスト
+     */
+    bloodTypes: function () {
+      return this.$store.getters['ccardApplication/bloodTypes'];
+    },
+    /**
      * 登録可能かを判定する
      */
     canSubmit: function () {
       let result = true;
       result = result && this.error.address1st === null;
       result = result && this.error.address2nd === null;
+      result = result && this.error.bloodType === null;
       result = result && this.error.birthAt === null;
       result = result && this.error.certifierMemberId === null;
       result = result && this.error.certifyAt === null;
@@ -894,6 +920,7 @@ export default {
         birthAtDay: null,
         birthAtMonth: null,
         birthAtYear: null,
+        bloodType: null,
         certifierMemberId: null,
         certifyAtDay: null,
         certifyAtMonth: null,
@@ -930,6 +957,7 @@ export default {
         address1st: '',
         address2nd: '',
         birthAt: '',
+        bloodType: '',
         certifierMemberId: '',
         certifyAt: '',
         crossoverAssosiationName: '',
@@ -1041,6 +1069,7 @@ export default {
       this.input.birthAtDay = application?.birthAtDay;
       this.input.birthAtMonth = application?.birthAtMonth;
       this.input.birthAtYear = application?.birthAtYear;
+      this.input.bloodType = application?.bloodType;
       if (!isCopy) this.input.certifierMemberId = application?.certifierMemberId;
       this.input.certifierMemberName = application?.certifierMemberName;
       this.input.certifyAtDay = isCopy
@@ -1151,6 +1180,15 @@ export default {
             month: this.input.birthAtMonth,
             day: this.input.birthAtDay,
           },
+          requiredCheck: true,
+        });
+        /**
+         * 血液型
+         */
+        console.log(`this.input.bloodType: ${this.input.bloodType}`);
+        this.error.bloodType = validations.validateChars({
+          value: this.input.bloodType,
+          size: 10,
           requiredCheck: true,
         });
         /**

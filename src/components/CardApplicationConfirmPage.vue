@@ -109,6 +109,12 @@
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">
+              <span class="list-item-title">血液型：</span>
+              <span class="list-item-value--row-1-col-2">{{ bloodType }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
               <span class="list-item-title">郵便番号：</span>
               <span class="list-item-value--row-1-col-2">{{ postcode }}</span>
             </div>
@@ -238,6 +244,12 @@ export default {
     birthAt: function () {
       const ret = `${this.input?.birthAtYear}-${this.input?.birthAtMonth}-${this.input?.birthAtDay}`;
       return ret.includes('null') || ret.includes('undefined') ? null : ret;
+    },
+    /**
+     * 血液型
+     */
+    bloodType: function () {
+      return this.input?.bloodType;
     },
     /**
      * 認定メンバー名

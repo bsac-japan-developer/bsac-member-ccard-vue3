@@ -56,15 +56,24 @@
         </div>
       </v-ons-button>
     </div>
+    <member-pledge-dialog
+      :dialogVisible="memberPledgeDialogVisible"
+      @update:dialogVisible="memberPledgeDialogVisible = $event"
+      @agree="agreeMemberPledge"
+      @disagree="disagreeMemberPledge"
+    />
   </v-ons-page>
 </template>
 
 <script>
 import { markRaw } from 'vue';
 import cardApplicationInputPage from '@/components/CardApplicationInputPage.vue';
+import memberPledgeDialog from '@/components/parts/MemberPledgeDialog.vue';
 
 export default {
-  components: {},
+  components: {
+    memberPledgeDialog
+  },
   computed: {
     user: function () {
       const user = this.$store.getters['user/user'];
@@ -81,16 +90,30 @@ export default {
         loginId: null,
         password: null,
       },
+      memberPledgeDialogVisible: false,
       // isLoading: false,
     };
   },
   methods: {
+    /**
+     * サービス規約に同意する
+     */
+    agreeMemberPledge: function () {
+      // ランク登録画面に遷移する
+      this.$emit('push-page-navigation', markRaw(cardApplicationInputPage));
+    },
     /**
      * データをクリアする
      */
     clearData: function () {
       this.input.loginId = null;
       this.input.password = null;
+    },
+    /**
+     * サービス規約に同意しない
+     */
+    disagreeMemberPledge: function () {
+      // 何もしない
     },
     /**
      * 指定したURLを外部ブラウザで開く
@@ -165,7 +188,10 @@ export default {
             });
         });
 
-        if (success) this.$emit('push-page-navigation', markRaw(cardApplicationInputPage));
+        if (success) {
+          this.memberPledgeDialogVisible = true;
+          // ランク申請ページへの遷移は agreeMemberPledgeメソッドを参照
+        }
       } catch (error) {
         this.$logger.error(`[${this.$options.name}/toCardApplicationInputPage] ${error}`);
         this.$ons.notification.alert({ title: 'エラー', message: error.message });
