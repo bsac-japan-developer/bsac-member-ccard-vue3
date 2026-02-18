@@ -29,6 +29,24 @@
             </div>
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
+            <span class="list-item-title"> 申請種別 </span>
+            <div class="list-item-value">
+              <select
+                v-model="input.applicationType"
+                class="selectbox"
+                style="width: 75%; text-align-last: left"
+                @change="validate()"
+              >
+                <option v-for="type in applicationTypes" :key="type.key" :value="type.key">
+                  {{ type.value }}
+                </option>
+              </select>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.applicationType }}
+            </span>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
             <span class="list-item-title"> ランクグループ </span>
             <div class="list-item-value">
               <select
@@ -742,6 +760,12 @@ export default {
   components: { navigationToolbar },
   computed: {
     /**
+     * 申請種別リスト
+     */
+    applicationTypes: function () {
+      return this.$store.getters['ccardApplication/applicationTypes'];
+    },
+    /**
      * 日リスト
      */
     birtAtDays: function () {
@@ -763,6 +787,7 @@ export default {
       let result = true;
       result = result && this.error.address1st === null;
       result = result && this.error.address2nd === null;
+      result = result && this.error.applicationType === null;
       result = result && this.error.bloodType === null;
       result = result && this.error.birthAt === null;
       result = result && this.error.certifierMemberId === null;
@@ -917,6 +942,7 @@ export default {
       input: {
         address1st: null,
         address2nd: null,
+        applicationType: null,
         birthAtDay: null,
         birthAtMonth: null,
         birthAtYear: null,
@@ -956,6 +982,7 @@ export default {
       error: {
         address1st: '',
         address2nd: '',
+        applicationType: '',
         birthAt: '',
         bloodType: '',
         certifierMemberId: '',
@@ -1066,6 +1093,7 @@ export default {
       }
       this.input.address1st = application?.address1st;
       this.input.address2nd = application?.address2nd;
+      this.input.applicationType = application?.applicationType;
       this.input.birthAtDay = application?.birthAtDay;
       this.input.birthAtMonth = application?.birthAtMonth;
       this.input.birthAtYear = application?.birthAtYear;
@@ -1172,6 +1200,14 @@ export default {
           requiredCheck: false,
         });
         /**
+         * 申請種別
+         */
+        this.error.applicationType = validations.validateChars({
+          value: this.input.applicationType,
+          size: 1,
+          requiredCheck: true,
+        });
+        /**
          * 生年月日
          */
         this.error.birthAt = validations.validateDate({
@@ -1185,7 +1221,6 @@ export default {
         /**
          * 血液型
          */
-        console.log(`this.input.bloodType: ${this.input.bloodType}`);
         this.error.bloodType = validations.validateChars({
           value: this.input.bloodType,
           size: 10,

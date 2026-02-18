@@ -4,6 +4,7 @@ import log from '@/common/log';
 import storage from '@/common/local-storage';
 
 const state = {
+  applicationTypes: [],
   bloodTypes: [],
   cardApplication: {},
   cardApplications: [],
@@ -20,6 +21,14 @@ const state = {
 };
 
 const getters = {
+  applicationTypes: (state) => state.applicationTypes || [],
+  applicationTypeValue: (state) => (key) => {
+    const types = state.applicationTypes.filter((type) => {
+      return type.key === key;
+    });
+    if (types.length < 1) return null;
+    return types[0].value;
+  },
   bloodTypes: (state) => state.bloodTypes || [],
   cardApplication: (state) => state.cardApplication || {},
   cardApplications: (state) => {
@@ -28,7 +37,6 @@ const getters = {
     return state.cardApplications || [];
   },
   cardSendingDestinations: (state) => (diveCenter) => {
-    console.log(`diveCenter: ${diveCenter}`);
     if (diveCenter === 0) {
       return state.cardSendingDestinations.filter((destination) => {
         return destination?.value !== 'ダイブセンター';
@@ -48,7 +56,7 @@ const getters = {
     state.cardSendingDestinations.filter((destination) => destination.diveCenter),
   cardSendingDestinationsForMember: (state) =>
     state.cardSendingDestinations.filter((destination) => destination.member),
-  diveCenters: (state) => (state.diveCenters ? state.diveCenters : []),
+  diveCenters: (state) => state.diveCenters || [],
   diveCenterName: (state) => (id) => {
     const diveCenters = state.diveCenters.filter((diveCenter) => {
       return diveCenter.id === id;
@@ -100,7 +108,7 @@ const getters = {
     if (ranks.length < 1) return true;
     return ranks[0].needIdPhoto;
   },
-  rankGroups: (state) => (state.rankGroups ? state.rankGroups : []),
+  rankGroups: (state) => state.rankGroups || [],
   rankName: (state) => (id) => {
     const ranks = state.ranks.filter((rank) => {
       return rank.id === id;
@@ -130,6 +138,7 @@ const getters = {
       ).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(
         now.getMinutes()
       ).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`,
+      application_type: input.applicationType,
       birth_at: `${input.birthAtYear}-${input.birthAtMonth}-${input.birthAtDay}`,
       blood_type: input.bloodType,
       certifier_member_id: input.certifierMemberId,
@@ -163,6 +172,25 @@ const getters = {
 };
 
 const mutations = {
+  /**
+   * 申請種別データをセットする
+   * @param {*} state
+   * @param {*} response
+   */
+  setApplicationTypes(state, response) {
+    if (!response?.data?.options?.application_types) return;
+
+    const list = [];
+    response.data.options.application_types.forEach((value) => {
+      list.push(conversions.toCamelCaseForObject(value));
+    });
+    state.applicationTypes = list;
+    log.output(
+      `cardApplication.setApplicationTypes`,
+      `state.applicationTypes`,
+      state.applicationTypes
+    );
+  },
   /**
    * 血液型データをセットする
    * @param {*} state
@@ -222,6 +250,7 @@ const mutations = {
     state.cardApplication = {
       address1st: application?.address1st,
       address2nd: application?.address2nd,
+      applicationType: application?.applicationType,
       birthAtDay:
         application?.birthAt?.split('-')?.length > 2 ? application?.birthAt?.split('-')[2] : null,
       birthAtMonth:
@@ -504,6 +533,7 @@ const actions = {
       rootGetters,
       setters: [
         'clearData',
+        'setApplicationTypes',
         'setBloodTypes',
         'setDetailData',
         'setCardSendingDestinations',

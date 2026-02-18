@@ -23,6 +23,12 @@
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">
+              <span class="list-item-title">申請種別：</span>
+              <span class="list-item-value--row-1-col-2">{{ applicationType }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
               <span class="list-item-title">ランク：</span>
               <span class="list-item-value--row-1-col-2">{{ rankName }}</span>
             </div>
@@ -237,6 +243,14 @@ export default {
      */
     address2nd: function () {
       return this.input?.address2nd;
+    },
+    /**
+     * カード送付先
+     */
+    applicationType: function () {
+      return this.$store.getters['ccardApplication/applicationTypeValue'](
+        this.input?.applicationType
+      );
     },
     /**
      * 生年月日
