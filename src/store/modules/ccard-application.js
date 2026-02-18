@@ -160,6 +160,10 @@ const getters = {
       deliver_card_to: input.deliverCardTo,
       dive_center_id: input.diveCenterId !== null ? input.diveCenterId : -1,
       email: input.email,
+      emergency_name: input.emergencyName,
+      emergency_postcode: input.emergencyPostcode,
+      emergency_address: input.emergencyAddress,
+      emergency_phone_no: input.emergencyPhoneNo,
       // diver_id: input.diverId !== null ? input.diverId : -1,
       // diver_user_id: input.diverUserId !== null ? input.diverUserId : -1,
       gender: input.gender,
@@ -177,6 +181,10 @@ const getters = {
       remarks: input.remarks,
       rank_id: input.rankId,
       updated_at: input.updatedAt,
+      workplace_name: input.workplaceName,
+      workplace_postcode: input.workplacePostcode,
+      workplace_address: input.workplaceAddress,
+      workplace_phone_no: input.workplacePhoneNo,
     };
   },
   searchConditions: (state) => state.searchConditions || {},
@@ -305,6 +313,10 @@ const mutations = {
       // diverUserId: application.diverUserId,
       gender: application?.genderValue,
       email: application?.email,
+      emergencyName: application?.emergencyName,
+      emergencyPostcode: application?.emergencyPostcode,
+      emergencyAddress: application?.emergencyAddress,
+      emergencyPhoneNo: application?.emergencyPhoneNo,
       id: application?.id,
       memberId: application?.memberId,
       memberName: application?.memberName,
@@ -323,6 +335,10 @@ const mutations = {
       remarks: application?.remarks,
       status: application?.status,
       updatedAt: application?.updatedAt,
+      workplaceName: application?.workplaceName,
+      workplacePostcode: application?.workplacePostcode,
+      workplaceAddress: application?.workplaceAddress,
+      workplacePhoneNo: application?.workplacePhoneNo,
     };
     log.output(`cardApplication.setDetailData`, `state.cardApplication`, state.cardApplication);
 

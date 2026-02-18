@@ -682,6 +682,150 @@
             <span class="list-header">その他</span>
           </v-ons-list-header>
           <v-ons-list-item modifier="longdivider">
+            <p class="list-item-title" style="margin-bottom: 1rem">勤務先</p>
+            <span class="list-item-title"> 勤務先名： </span>
+            <div class="list-item-value">
+              <v-ons-input
+                placeholder=""
+                type="text"
+                v-model="input.workplaceName"
+                @blur="validate()"
+                :readonly="!input.properties.editable"
+                modifier="material"
+                class="textbox"
+              ></v-ons-input>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.workplaceName }}
+            </span>
+            <span class="list-item-title"> 郵便番号： </span>
+            <div class="list-item-value">
+              <v-ons-input
+                placeholder="101-0035"
+                type="text"
+                inputmode="numeric"
+                v-model="input.workplacePostcode"
+                @blur="validate()"
+                :readonly="!input.properties.editable"
+                modifier="material"
+                class="textbox--30"
+              ></v-ons-input>
+              <v-ons-button
+                @click="setWorkplaceAddressByPostcode()"
+                :disabled="!input.properties.editable"
+                class="button--postcode-conversion"
+              >
+                住所をセット
+              </v-ons-button>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.workplacePostcode }}
+            </span>
+            <span class="list-item-title"> 住所： </span>
+            <div class="list-item-value">
+              <v-ons-input
+                placeholder=""
+                type="text"
+                v-model="input.workplaceAddress"
+                @blur="validate()"
+                :readonly="!input.properties.editable"
+                modifier="material"
+                class="textbox"
+              ></v-ons-input>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.workplaceAddress }}
+            </span>
+            <span class="list-item-title"> 電話番号： </span>
+            <div class="list-item-value">
+              <v-ons-input
+                placeholder="0352975656"
+                type="text"
+                inputmode="numeric"
+                v-model="input.workplacePhoneNo"
+                @blur="validate()"
+                :readonly="!input.properties.editable"
+                modifier="material"
+                class="textbox--40"
+              ></v-ons-input>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.workplacePhoneNo }}
+            </span>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <p class="list-item-title" style="margin-bottom: 1rem">緊急連絡先</p>
+            <span class="list-item-title"> 氏名： </span>
+            <div class="list-item-value">
+              <v-ons-input
+                placeholder=""
+                type="text"
+                v-model="input.emergencyName"
+                @blur="validate()"
+                :readonly="!input.properties.editable"
+                modifier="material"
+                class="textbox"
+              ></v-ons-input>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.emergencyName }}
+            </span>
+            <span class="list-item-title"> 郵便番号： </span>
+            <div class="list-item-value">
+              <v-ons-input
+                placeholder="101-0035"
+                type="text"
+                inputmode="numeric"
+                v-model="input.emergencyPostcode"
+                @blur="validate()"
+                :readonly="!input.properties.editable"
+                modifier="material"
+                class="textbox--30"
+              ></v-ons-input>
+              <v-ons-button
+                @click="setEmergencyAddressByPostcode()"
+                :disabled="!input.properties.editable"
+                class="button--postcode-conversion"
+              >
+                住所をセット
+              </v-ons-button>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.emergencyPostcode }}
+            </span>
+            <span class="list-item-title"> 住所： </span>
+            <div class="list-item-value">
+              <v-ons-input
+                placeholder=""
+                type="text"
+                v-model="input.emergencyAddress"
+                @blur="validate()"
+                :readonly="!input.properties.editable"
+                modifier="material"
+                class="textbox"
+              ></v-ons-input>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.emergencyAddress }}
+            </span>
+            <span class="list-item-title"> 電話番号： </span>
+            <div class="list-item-value">
+              <v-ons-input
+                placeholder="0352975656"
+                type="text"
+                inputmode="numeric"
+                v-model="input.emergencyPhoneNo"
+                @blur="validate()"
+                :readonly="!input.properties.editable"
+                modifier="material"
+                class="textbox--40"
+              ></v-ons-input>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.emergencyPhoneNo }}
+            </span>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
             <span class="list-item-title"> カード送付先 </span>
             <span v-if="input.properties.editable" class="list-item-title-note">
               ※「不要」を選択した場合、現物カードの発行はありません。<br />
@@ -829,6 +973,10 @@ export default {
       // result = result && this.error.diverUserId === null;
       result = result && this.error.deliverCardTo === null;
       result = result && this.error.email === null;
+      result = result && this.error.emergencyName === null;
+      result = result && this.error.emergencyPostcode === null;
+      result = result && this.error.emergencyAddress === null;
+      result = result && this.error.emergencyPhoneNo === null;
       result = result && this.error.gender === null;
       result = result && this.error.memberId === null;
       result = result && this.error.memberStatus === null;
@@ -843,6 +991,10 @@ export default {
       result = result && this.error.prefecture === null;
       result = result && this.error.rankId === null;
       result = result && this.error.remarks === null;
+      result = result && this.error.workplaceName === null;
+      result = result && this.error.workplacePostcode === null;
+      result = result && this.error.workplaceAddress === null;
+      result = result && this.error.workplacePhoneNo === null;
       return result;
     },
     /**
@@ -997,6 +1149,10 @@ export default {
         diverId: null,
         diverUserId: null,
         email: null,
+        emergencyName: null,
+        emergencyPostcode: null,
+        emergencyAddress: null,
+        emergencyPhoneNo: null,
         gender: null,
         id: null,
         memberId: null,
@@ -1014,6 +1170,10 @@ export default {
         rankId: null,
         remarks: null,
         updatedAt: null,
+        workplaceName: null,
+        workplacePostcode: null,
+        workplaceAddress: null,
+        workplacePhoneNo: null,
       },
       error: {
         address1st: '',
@@ -1032,6 +1192,10 @@ export default {
         diverId: '',
         diverUserId: '',
         email: '',
+        emergencyName: '',
+        emergencyPostcode: '',
+        emergencyAddress: '',
+        emergencyPhoneNo: '',
         gender: '',
         idPhoto: '',
         memberId: '',
@@ -1046,6 +1210,10 @@ export default {
         prefecture: '',
         rankId: '',
         remarks: '',
+        workplaceName: '',
+        workplacePostcode: '',
+        workplaceAddress: '',
+        workplacePhoneNo: '',
       },
     };
   },
@@ -1120,6 +1288,19 @@ export default {
       }
     },
     /**
+     * 緊急連絡先郵便番号から勤務先住所を取得しテキストボックスにセットする
+     */
+    setEmergencyAddressByPostcode: async function () {
+      try {
+        let address = await conversions.toAddressByPostcode(this.input.emergencyPostcode);
+        this.input.emergencyAddress = address.prefecture + address.address1st;
+        this.validate();
+      } catch (error) {
+        this.$logger.error(`[${this.$options.name}/setEmergencyAddressByPostcode] ${error}`);
+        this.$ons.notification.alert({ title: 'エラー', message: error.message });
+      }
+    },
+    /**
      * データをセットする
      */
     setData: function (isCopy) {
@@ -1156,6 +1337,10 @@ export default {
       this.input.diveCenterId = application?.diveCenterId;
       this.input.diveCenterName = application?.diveCenterName;
       this.input.email = application?.email;
+      this.input.emergencyName = application?.emergencyName;
+      this.input.emergencyPostcode = application?.emergencyPostcode;
+      this.input.emergencyAddress = application?.emergencyAddress;
+      this.input.emergencyPhoneNo = application?.emergencyPhoneNo;
       // this.input.diverId = application?.diverId;
       // this.input.diverUserId = application?.diverUserId;
       if (!isCopy) this.input.properties = application?.properties;
@@ -1177,8 +1362,25 @@ export default {
       this.input.remarks = application?.remarks;
       if (!isCopy) this.input.status = application?.status;
       this.input.updatedAt = application?.updatedAt;
+      this.input.workplaceName = application?.workplaceName;
+      this.input.workplacePostcode = application?.workplacePostcode;
+      this.input.workplaceAddress = application?.workplaceAddress;
+      this.input.workplacePhoneNo = application?.workplacePhoneNo;
       this.validate();
       // console.log(`this.input: ${JSON.stringify(this.input)}`);
+    },
+    /**
+     * 勤務先郵便番号から勤務先住所を取得しテキストボックスにセットする
+     */
+    setWorkplaceAddressByPostcode: async function () {
+      try {
+        let address = await conversions.toAddressByPostcode(this.input.workplacePostcode);
+        this.input.workplaceAddress = address.prefecture + address.address1st;
+        this.validate();
+      } catch (error) {
+        this.$logger.error(`[${this.$options.name}/setWorkplaceAddressByPostcode] ${error}`);
+        this.$ons.notification.alert({ title: 'エラー', message: error.message });
+      }
     },
     /**
      * 送信する
@@ -1359,6 +1561,38 @@ export default {
           emailCheck: true,
         });
         /**
+         * 緊急連絡先 氏名
+         */
+        this.error.emergencyName = validations.validateChars({
+          value: this.input.emergencyName,
+          size: 50,
+          requiredCheck: false,
+        });
+        /**
+         * 緊急連絡先 郵便番号
+         */
+        this.error.emergencyPostcode = validations.validateChars({
+          value: this.input.emergencyPostcode,
+          size: 8,
+          requiredCheck: false,
+        });
+        /**
+         * 緊急連絡先 住所
+         */
+        this.error.emergencyAddress = validations.validateChars({
+          value: this.input.emergencyAddress,
+          size: 100,
+          requiredCheck: false,
+        });
+        /**
+         * 緊急連絡先 電話番号
+         */
+        this.error.emergencyPhoneNo = validations.validateChars({
+          value: this.input.emergencyPhoneNo,
+          size: 20,
+          requiredCheck: false,
+        });
+        /**
          * ダイバーID
          */
         // this.error.diverId = null;
@@ -1491,6 +1725,38 @@ export default {
         this.error.remarks = validations.validateChars({
           value: this.input.remarks,
           size: 50,
+          requiredCheck: false,
+        });
+        /**
+         * 勤務先名
+         */
+        this.error.workplaceName = validations.validateChars({
+          value: this.input.workplaceName,
+          size: 50,
+          requiredCheck: false,
+        });
+        /**
+         * 勤務先 郵便番号
+         */
+        this.error.workplacePostcode = validations.validateChars({
+          value: this.input.workplacePostcode,
+          size: 8,
+          requiredCheck: false,
+        });
+        /**
+         * 勤務先 住所
+         */
+        this.error.workplaceAddress = validations.validateChars({
+          value: this.input.workplaceAddress,
+          size: 100,
+          requiredCheck: false,
+        });
+        /**
+         * 勤務先 電話番号
+         */
+        this.error.workplacePhoneNo = validations.validateChars({
+          value: this.input.workplacePhoneNo,
+          size: 20,
           requiredCheck: false,
         });
         // console.log(`this.error: ${JSON.stringify(this.error)}`);

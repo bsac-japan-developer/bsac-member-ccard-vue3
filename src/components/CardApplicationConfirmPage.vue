@@ -199,6 +199,54 @@
           <v-ons-list-header><span class="list-header">その他</span></v-ons-list-header>
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">
+              <span class="list-item-title">勤務先名：</span>
+              <span class="list-item-value--row-1-col-2">{{ workplaceName }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">勤務先（郵便番号）：</span>
+              <span class="list-item-value--row-1-col-2">{{ workplacePostcode }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">勤務先（住所）：</span>
+              <span class="list-item-value--row-1-col-2">{{ workplaceAddress }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">勤務先（電話番号）：</span>
+              <span class="list-item-value--row-1-col-2">{{ workplacePhoneNo }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">緊急連絡先（氏名）：</span>
+              <span class="list-item-value--row-1-col-2">{{ emergencyName }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">緊急連絡先（郵便番号）：</span>
+              <span class="list-item-value--row-1-col-2">{{ emergencyPostcode }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">緊急連絡先（住所）：</span>
+              <span class="list-item-value--row-1-col-2">{{ emergencyAddress }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">緊急連絡先（電話番号）：</span>
+              <span class="list-item-value--row-1-col-2">{{ emergencyPhoneNo }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
               <span class="list-item-title">カード送付先：</span>
               <span class="list-item-value--row-1-col-2">{{ deliverCardTo }}</span>
             </div>
@@ -337,6 +385,30 @@ export default {
       return this.input?.email;
     },
     /**
+     * 緊急連絡先 氏名
+     */
+    emergencyName: function () {
+      return this.input?.emergencyName;
+    },
+    /**
+     * 緊急連絡先 郵便番号
+     */
+    emergencyPostcode: function () {
+      return this.input?.emergencyPostcode;
+    },
+    /**
+     * 緊急連絡先 住所
+     */
+    emergencyAddress: function () {
+      return this.input?.emergencyAddress;
+    },
+    /**
+     * 緊急連絡先 電話番号
+     */
+    emergencyPhoneNo: function () {
+      return this.input?.emergencyPhoneNo;
+    },
+    /**
      * 性別
      */
     gender: function () {
@@ -444,6 +516,30 @@ export default {
      */
     remarks: function () {
       return this.input?.remarks;
+    },
+    /**
+     * 勤務先名
+     */
+    workplaceName: function () {
+      return this.input?.workplaceName;
+    },
+    /**
+     * 勤務先 郵便番号
+     */
+    workplacePostcode: function () {
+      return this.input?.workplacePostcode;
+    },
+    /**
+     * 勤務先 住所
+     */
+    workplaceAddress: function () {
+      return this.input?.workplaceAddress;
+    },
+    /**
+     * 勤務先 電話番号
+     */
+    workplacePhoneNo: function () {
+      return this.input?.workplacePhoneNo;
     },
   },
   created: function () {},
