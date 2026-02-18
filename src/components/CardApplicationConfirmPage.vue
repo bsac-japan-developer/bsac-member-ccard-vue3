@@ -161,7 +161,7 @@
               <span class="list-item-value--row-1-col-2">{{ email }}</span>
             </div>
           </v-ons-list-item>
-          <!-- <v-ons-list-header>
+          <v-ons-list-header>
             <span class="list-header">他教育機関認定情報（クロスオーバーの場合のみ入力）</span>
           </v-ons-list-header>
           <v-ons-list-item modifier="longdivider">
@@ -189,7 +189,7 @@
                 {{ crossoverCertifyAt }}
               </span>
             </div>
-          </v-ons-list-item> -->
+          </v-ons-list-item>
           <v-ons-list-header><span class="list-header">その他</span></v-ons-list-header>
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">

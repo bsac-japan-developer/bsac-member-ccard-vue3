@@ -548,7 +548,7 @@
               {{ this.error.email }}
             </span>
           </v-ons-list-item>
-          <!-- <v-ons-list-header v-if="input.rankGroupId !== 3">
+          <v-ons-list-header v-if="input.rankGroupId !== 3">
             <span class="list-header">他教育機関認定情報（クロスオーバーの場合のみ入力）</span>
           </v-ons-list-header>
           <v-ons-list-item v-if="input.rankGroupId !== 3" modifier="longdivider">
@@ -652,7 +652,7 @@
             <span v-if="input.properties.editable" class="validation-message">
               {{ this.error.crossoverCertifyAt }}
             </span>
-          </v-ons-list-item> -->
+          </v-ons-list-item>
           <v-ons-list-header>
             <span class="list-header">その他</span>
           </v-ons-list-header>
@@ -792,10 +792,10 @@ export default {
       result = result && this.error.birthAt === null;
       result = result && this.error.certifierMemberId === null;
       result = result && this.error.certifyAt === null;
-      // result = result && this.error.crossoverAssosiationName === null;
-      // result = result && this.error.crossoverCardNo === null;
-      // result = result && this.error.crossoverCertifyAt === null;
-      // result = result && this.error.crossoverRankName === null;
+      result = result && this.error.crossoverAssosiationName === null;
+      result = result && this.error.crossoverCardNo === null;
+      result = result && this.error.crossoverCertifyAt === null;
+      result = result && this.error.crossoverRankName === null;
       result = result && this.error.deliverCardTo === null;
       result = result && this.error.diveCenterId === null;
       // result = result && this.error.diverId === null;
@@ -1253,58 +1253,50 @@ export default {
         /**
          * 他団体認定情報・教育機関名
          */
-        // if (this.input.rankGroupId === 3) this.input.crossoverAssosiationName = null;
-        // this.error.crossoverAssosiationName = validations.validateChars({
-        //   value: this.input.crossoverAssosiationName,
-        //   size: 50,
-        //   requiredCheck: false,
-        // });
+        if (this.input.rankGroupId === 3) this.input.crossoverAssosiationName = null;
+        this.error.crossoverAssosiationName = validations.validateChars({
+          value: this.input.crossoverAssosiationName,
+          size: 50,
+          requiredCheck: false,
+        });
         /**
          * 他団体認定情報・カードNo
          */
-        // if (this.input.rankGroupId === 3 || !this.crossoverRquired)
-        //   this.input.crossoverCardNo = null;
-        // this.error.crossoverCardNo = validations.validateChars({
-        //   value: this.input.crossoverCardNo,
-        //   size: 50,
-        //   requiredCheck: this.crossoverRquired,
-        // });
+        if (this.input.rankGroupId === 3 || !this.crossoverRquired)
+          this.input.crossoverCardNo = null;
+        this.error.crossoverCardNo = validations.validateChars({
+          value: this.input.crossoverCardNo,
+          size: 50,
+          requiredCheck: this.crossoverRquired,
+        });
         /**
          * 他団体認定情報・認定日
          */
-        // if (this.input.rankGroupId === 3 || !this.crossoverRquired) {
-        //   this.input.crossoverCertifyAtYear = null;
-        //   this.input.crossoverCertifyAtMonth = null;
-        //   this.input.crossoverCertifyAtDay = null;
-        // }
-        // this.error.crossoverCertifyAt = validations.validateDate({
-        //   value: {
-        //     year: this.input.crossoverCertifyAtYear,
-        //     month: this.input.crossoverCertifyAtMonth,
-        //     day: this.input.crossoverCertifyAtDay,
-        //   },
-        //   requiredCheck: this.crossoverRquired,
-        // });
+        if (this.input.rankGroupId === 3 || !this.crossoverRquired) {
+          this.input.crossoverCertifyAtYear = null;
+          this.input.crossoverCertifyAtMonth = null;
+          this.input.crossoverCertifyAtDay = null;
+        }
+        this.error.crossoverCertifyAt = validations.validateDate({
+          value: {
+            year: this.input.crossoverCertifyAtYear,
+            month: this.input.crossoverCertifyAtMonth,
+            day: this.input.crossoverCertifyAtDay,
+          },
+          requiredCheck: this.crossoverRquired,
+        });
         /**
          * 他団体認定情報・ランク名
          */
-        // if (this.input.rankGroupId === 3 || !this.crossoverRquired)
-        //   this.input.crossoverRankName = null;
-        // this.error.crossoverRankName = validations.validateChars({
-        //   value: this.input.crossoverRankName,
-        //   size: 50,
-        //   requiredCheck: this.crossoverRquired,
-        // });
+        if (this.input.rankGroupId === 3 || !this.crossoverRquired)
+          this.input.crossoverRankName = null;
+        this.error.crossoverRankName = validations.validateChars({
+          value: this.input.crossoverRankName,
+          size: 50,
+          requiredCheck: this.crossoverRquired,
+        });
         /**
          * カード返送先
-         */
-        // this.error.deliverCardTo = validations.validateChars({
-        //   value: this.input.deliverCardTo,
-        //   size: 1,
-        //   requiredCheck: true,
-        // });
-        /**
-         * カード送付先
          */
         this.error.deliverCardTo = validations.validateChars({
           value: this.input.deliverCardTo,
