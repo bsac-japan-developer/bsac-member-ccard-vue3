@@ -262,6 +262,31 @@
             </div>
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
+            <span class="list-item-title"> メンバーステータス </span>
+            <div class="list-item-value">
+              <select
+                v-model="input.memberStatus"
+                class="selectbox"
+                style="width: 75%; text-align-last: left"
+                @change="validate()"
+              >
+                <option v-for="status in memberStatuses" :key="status.key" :value="status.key">
+                  {{ status.value }}
+                </option>
+              </select>
+            </div>
+            <span v-if="input.memberStatus === 1" class="list-item-title-note">
+              賠償責任保険加入有<br />
+              新規加入の場合は別途加入手続きが必要です。
+            </span>
+            <span v-if="input.memberStatus === 2" class="list-item-title-note">
+              賠償責任保険加入無し
+            </span>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.memberStatus }}
+            </span>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
             <span class="list-item-title"> 氏名（漢字） </span>
             <span v-if="input.properties.editable" class="list-item-title-note">
               姓・名の間に<span class="red-bold">全角</span>スペースを入れて下さい
@@ -657,6 +682,33 @@
             <span class="list-header">その他</span>
           </v-ons-list-header>
           <v-ons-list-item modifier="longdivider">
+            <span class="list-item-title"> カード送付先 </span>
+            <span v-if="input.properties.editable" class="list-item-title-note">
+              ※「不要」を選択した場合、現物カードの発行はありません。<br />
+              ※フリーメンバーは所属ダイブセンターを選択できません。 <br />
+              ※認定インストラクターは、BSAC Japanに登録されている住所に発送いたします。
+            </span>
+            <div class="list-item-value">
+              <select
+                v-model="input.deliverCardTo"
+                class="selectbox"
+                style="width: 75%; text-align-last: left"
+                @change="validate()"
+              >
+                <option
+                  v-for="destination in cardSendingDestinations"
+                  :key="destination.key"
+                  :value="destination.key"
+                >
+                  {{ destination.value }}
+                </option>
+              </select>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.deliverCardTo }}
+            </span>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
             <span class="list-item-title">備考</span>
             <div class="list-item-value">
               <v-ons-input
@@ -671,31 +723,6 @@
             </div>
             <span v-if="input.properties.editable" class="validation-message">
               {{ this.error.remarks }}
-            </span>
-          </v-ons-list-item>
-          <v-ons-list-item modifier="longdivider">
-            <span class="list-item-title"> カード返送先 </span>
-            <span v-if="input.properties.editable" class="list-item-title-note">
-              ※「不要」を選択した場合、現物カードの発行はありません。
-            </span>
-            <div class="list-item-value">
-              <select
-                v-model="input.deliverCardTo"
-                class="selectbox"
-                style="width: 50%; text-align-last: left"
-                @change="validate()"
-              >
-                <option
-                  v-for="destination in cardSendingDestinations"
-                  :key="destination.id"
-                  :value="destination.id"
-                >
-                  {{ destination.value }}
-                </option>
-              </select>
-            </div>
-            <span v-if="input.properties.editable" class="validation-message">
-              {{ this.error.deliverCardTo }}
             </span>
           </v-ons-list-item>
           <v-ons-list-header v-if="needIdPhoto">
@@ -804,6 +831,7 @@ export default {
       result = result && this.error.email === null;
       result = result && this.error.gender === null;
       result = result && this.error.memberId === null;
+      result = result && this.error.memberStatus === null;
       result = result && this.error.mobileNo === null;
       result = result && this.error.nameEn === null;
       result = result && this.error.nameKana === null;
@@ -848,7 +876,7 @@ export default {
       });
     },
     /**
-     * カード返送先リスト
+     * カード送付先リスト
      */
     cardSendingDestinations: function () {
       return this.$store.getters['ccardApplication/cardSendingDestinations'](
@@ -859,7 +887,8 @@ export default {
      * クロスオーバー必須可否
      */
     crossoverRquired: function () {
-      return this.input.crossoverAssosiationName?.length > 0;
+      // return this.input.crossoverAssosiationName?.length > 0;
+      return this.input.applicationType === 3;
     },
     /**
      * ダイブセンターリスト
@@ -908,6 +937,12 @@ export default {
      */
     members: function () {
       return this.$store.getters['ccardApplication/members'](null);
+    },
+    /**
+     * メンバーステータスリスト
+     */
+    memberStatuses: function () {
+      return this.$store.getters['ccardApplication/memberStatuses'];
     },
     /**
      * 月リスト
@@ -965,6 +1000,7 @@ export default {
         gender: null,
         id: null,
         memberId: null,
+        memberStatus: null,
         mobileNo: null,
         nameEn: null,
         nameKana: null,
@@ -999,6 +1035,7 @@ export default {
         gender: '',
         idPhoto: '',
         memberId: '',
+        memberStatus: '',
         mobileNo: '',
         nameEn: '',
         nameKana: '',
@@ -1125,6 +1162,7 @@ export default {
       this.input.gender = application?.gender;
       if (!isCopy) this.input.id = application?.id;
       this.input.memberId = application?.memberId;
+      this.input.memberStatus = application?.memberStatus;
       this.input.memberName = application?.memberName;
       this.input.mobileNo = application?.mobileNo;
       this.input.nameEn = application?.nameEn;
@@ -1253,17 +1291,17 @@ export default {
         /**
          * 他団体認定情報・教育機関名
          */
-        if (this.input.rankGroupId === 3) this.input.crossoverAssosiationName = null;
+        // if (this.input.rankGroupId === 3) this.input.crossoverAssosiationName = null;
         this.error.crossoverAssosiationName = validations.validateChars({
           value: this.input.crossoverAssosiationName,
           size: 50,
-          requiredCheck: false,
+          requiredCheck: this.crossoverRquired,
         });
         /**
          * 他団体認定情報・カードNo
          */
-        if (this.input.rankGroupId === 3 || !this.crossoverRquired)
-          this.input.crossoverCardNo = null;
+        // if (this.input.rankGroupId === 3 || !this.crossoverRquired)
+        //   this.input.crossoverCardNo = null;
         this.error.crossoverCardNo = validations.validateChars({
           value: this.input.crossoverCardNo,
           size: 50,
@@ -1272,11 +1310,11 @@ export default {
         /**
          * 他団体認定情報・認定日
          */
-        if (this.input.rankGroupId === 3 || !this.crossoverRquired) {
-          this.input.crossoverCertifyAtYear = null;
-          this.input.crossoverCertifyAtMonth = null;
-          this.input.crossoverCertifyAtDay = null;
-        }
+        // if (this.input.rankGroupId === 3 || !this.crossoverRquired) {
+        //   this.input.crossoverCertifyAtYear = null;
+        //   this.input.crossoverCertifyAtMonth = null;
+        //   this.input.crossoverCertifyAtDay = null;
+        // }
         this.error.crossoverCertifyAt = validations.validateDate({
           value: {
             year: this.input.crossoverCertifyAtYear,
@@ -1288,15 +1326,15 @@ export default {
         /**
          * 他団体認定情報・ランク名
          */
-        if (this.input.rankGroupId === 3 || !this.crossoverRquired)
-          this.input.crossoverRankName = null;
+        // if (this.input.rankGroupId === 3 || !this.crossoverRquired)
+        //   this.input.crossoverRankName = null;
         this.error.crossoverRankName = validations.validateChars({
           value: this.input.crossoverRankName,
           size: 50,
           requiredCheck: this.crossoverRquired,
         });
         /**
-         * カード返送先
+         * カード送付先
          */
         this.error.deliverCardTo = validations.validateChars({
           value: this.input.deliverCardTo,
@@ -1359,6 +1397,14 @@ export default {
         //   this.input.memberId = -1;
         //   this.error.memberId = null;
         // }
+        /**
+         * メンバーステータス
+         */
+        this.error.memberStatus = validations.validateChars({
+          value: this.input.memberStatus,
+          size: 1,
+          requiredCheck: true,
+        });
         /**
          * 氏名（英字）
          */

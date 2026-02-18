@@ -15,6 +15,7 @@ const state = {
   input: {},
   memberPledge: {},
   members: [],
+  memberStatuses: [],
   rankGroups: [],
   ranks: [],
   searchConditions: { exclude_canceled: true },
@@ -45,9 +46,10 @@ const getters = {
       return state.cardSendingDestinations;
     }
   },
-  cardSendingDestinationValue: (state) => (id) => {
-    const destinations = state.cardSendingDestinations.filter((gender) => {
-      return gender.id === id;
+  cardSendingDestinationValue: (state) => (key) => {
+    console.log(`key: ${key}`);
+    const destinations = state.cardSendingDestinations.filter((destination) => {
+      return destination.key === key;
     });
     if (destinations.length < 1) return null;
     return destinations[0].value;
@@ -103,6 +105,14 @@ const getters = {
       value: member.value,
     }));
   },
+  memberStatuses: (state) => state.memberStatuses || [],
+  memberStatusValue: (state) => (key) => {
+    const statuses = state.memberStatuses.filter((status) => {
+      return status.key === key;
+    });
+    if (statuses.length < 1) return null;
+    return statuses[0].value;
+  },
   needIdPhoto: (state) => (rankId) => {
     const ranks = state.ranks.filter((rank) => rank.id === rankId);
     if (ranks.length < 1) return true;
@@ -155,6 +165,7 @@ const getters = {
       gender: input.gender,
       id_photo_base64: getters.idPhoto,
       member_id: input.memberId !== null ? input.memberId : -1,
+      member_status: input.memberStatus,
       mobile_no: input.mobileNo,
       name_en: input.nameEn,
       name_kana: input.nameKana,
@@ -297,6 +308,7 @@ const mutations = {
       id: application?.id,
       memberId: application?.memberId,
       memberName: application?.memberName,
+      memberStatus: application?.memberStatus,
       mobileNo: application?.mobileNo,
       nameEn: application?.nameEn,
       nameKana: application?.nameKana,
@@ -402,6 +414,21 @@ const mutations = {
     });
     state.members = list;
     log.output(`cardApplication.setMembers`, `state.members`, state.members);
+  },
+  /**
+   * メンバーステータスデータをセットする
+   * @param {*} state
+   * @param {*} response
+   */
+  setMemberStatuses(state, response) {
+    if (!response?.data?.options?.member_statuses) return;
+
+    const list = [];
+    response.data.options.member_statuses.forEach((value) => {
+      list.push(conversions.toCamelCaseForObject(value));
+    });
+    state.memberStatuses = list;
+    log.output(`cardApplication.setMemberStatuses`, `state.memberStatuses`, state.memberStatuses);
   },
   /**
    * ランクグループデータをセットする
@@ -540,6 +567,7 @@ const actions = {
         'setDiveCenters',
         'setGenders',
         'setMembers',
+        'setMemberStatuses',
         'setMemberPledge',
         'setRankGroups',
         'setRanks',

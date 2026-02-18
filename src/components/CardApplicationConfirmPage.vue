@@ -83,6 +83,12 @@
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">
+              <span class="list-item-title">メンバーステータス：</span>
+              <span class="list-item-value--row-1-col-2">{{ memberStatus }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
               <span class="list-item-title">氏名（漢字）：</span>
               <span class="list-item-value--row-1-col-2">{{ nameJa }}</span>
             </div>
@@ -193,14 +199,14 @@
           <v-ons-list-header><span class="list-header">その他</span></v-ons-list-header>
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">
-              <span class="list-item-title">備考：</span>
-              <span class="list-item-value--row-1-col-2">{{ remarks }}</span>
+              <span class="list-item-title">カード送付先：</span>
+              <span class="list-item-value--row-1-col-2">{{ deliverCardTo }}</span>
             </div>
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">
-              <span class="list-item-title">カード送付先：</span>
-              <span class="list-item-value--row-1-col-2">{{ deliverCardTo }}</span>
+              <span class="list-item-title">備考：</span>
+              <span class="list-item-value--row-1-col-2">{{ remarks }}</span>
             </div>
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
@@ -365,6 +371,12 @@ export default {
      */
     memberId: function () {
       return this.input?.memberId;
+    },
+    /**
+     * メンバーステータス
+     */
+    memberStatus: function () {
+      return this.$store.getters['ccardApplication/memberStatusValue'](this.input?.memberStatus);
     },
     /**
      * メンバー名
