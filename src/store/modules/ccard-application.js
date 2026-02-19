@@ -18,6 +18,7 @@ const state = {
   memberPledge: {},
   members: [],
   memberStatuses: [],
+  payers: [],
   rankGroups: [],
   ranks: [],
   searchConditions: { exclude_canceled: true },
@@ -135,6 +136,14 @@ const getters = {
     if (ranks.length < 1) return true;
     return ranks[0].needIdPhoto;
   },
+  payers: (state) => state.payers || [],
+  payerValue: (state) => (key) => {
+    const payers = state.payers.filter((payer) => {
+      return payer.key === key;
+    });
+    if (payers.length < 1) return null;
+    return payers[0].value;
+  },
   rankGroups: (state) => state.rankGroups || [],
   rankName: (state) => (id) => {
     const ranks = state.ranks.filter((rank) => {
@@ -194,6 +203,7 @@ const getters = {
       name_kana: input.nameKana,
       name_ja: input.nameJa,
       partner_user_id: input.partnerUserId !== null ? input.partnerUserId : -1,
+      payer: input.payer,
       phone_no: input.phoneNo,
       postcode: input.postcode,
       prefecture: input.prefecture,
@@ -347,6 +357,7 @@ const mutations = {
       nameKana: application?.nameKana,
       nameJa: application?.nameJa,
       partnerUserId: application?.partnerUserId,
+      payer: application?.payer,
       phoneNo: application?.phoneNo,
       postcode: application?.postcode,
       prefecture: application?.prefecture,
@@ -506,6 +517,21 @@ const mutations = {
     log.output(`cardApplication.setMemberStatuses`, `state.memberStatuses`, state.memberStatuses);
   },
   /**
+   * 支払者データをセットする
+   * @param {*} state
+   * @param {*} response
+   */
+  setPayers(state, response) {
+    if (!response?.data?.options?.payers) return;
+
+    const list = [];
+    response.data.options.payers.forEach((value) => {
+      list.push(conversions.toCamelCaseForObject(value));
+    });
+    state.payers = list;
+    log.output(`cardApplication.setPayers`, `state.payers`, state.payers);
+  },
+  /**
    * ランクグループデータをセットする
    * @param {*} state
    * @param {*} response
@@ -646,6 +672,7 @@ const actions = {
         'setMembers',
         'setMemberStatuses',
         'setMemberPledge',
+        'setPayers',
         'setRankGroups',
         'setRanks',
       ],

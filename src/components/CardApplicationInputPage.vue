@@ -853,7 +853,15 @@
             </span>
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
-            <span class="list-item-title"> 書類送付先 </span>
+            <p class="list-item-title">BSAC Japanからの案内</p>
+            <span
+              v-if="input.properties.editable"
+              class="list-item-title-note"
+              style="margin-bottom: 1rem"
+            >
+              ※フリーメンバーは、全て本人宛になります。
+            </span>
+            <span class="list-item-title"> 書類送付先： </span>
             <div class="list-item-value">
               <select
                 v-model="input.deliverDocumentTo"
@@ -873,9 +881,7 @@
             <span v-if="input.properties.editable" class="validation-message">
               {{ this.error.deliverDocumentTo }}
             </span>
-          </v-ons-list-item>
-          <v-ons-list-item modifier="longdivider">
-            <span class="list-item-title"> メール送付先 </span>
+            <span class="list-item-title"> メール送付先： </span>
             <div class="list-item-value">
               <select
                 v-model="input.deliverEmailTo"
@@ -894,6 +900,29 @@
             </div>
             <span v-if="input.properties.editable" class="validation-message">
               {{ this.error.deliverEmailTo }}
+            </span>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <span class="list-item-title">
+              {{ !isAuthenticated ? '年次登録料・' : '' }}申請料・カード発行料のお支払い方法
+            </span>
+            <span v-if="input.properties.editable" class="list-item-title-note">
+              ※その他を選択した場合は、備考欄にその旨ご入力下さい。
+            </span>
+            <div class="list-item-value">
+              <select
+                v-model="input.payer"
+                class="selectbox"
+                style="width: 75%; text-align-last: left"
+                @change="validate()"
+              >
+                <option v-for="payer in payers" :key="payer.key" :value="payer.key">
+                  {{ payer.value }}
+                </option>
+              </select>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.payer }}
             </span>
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
@@ -1029,6 +1058,7 @@ export default {
       result = result && this.error.nameKana === null;
       result = result && this.error.nameJa === null;
       result = result && this.error.partnerUserId === null;
+      result = result && this.error.payer === null;
       result = result && this.error.phoneNo === null;
       result = result && this.error.idPhoto === null;
       result = result && this.error.postcode === null;
@@ -1159,6 +1189,12 @@ export default {
       return selectboxValues.getMonths();
     },
     /**
+     * 支払者リスト
+     */
+    payers: function () {
+      return this.$store.getters['ccardApplication/payers'];
+    },
+    /**
      * 都道府県リスト
      */
     prefectures: function () {
@@ -1220,6 +1256,7 @@ export default {
         nameKana: null,
         nameJa: null,
         partnerUserId: null,
+        payer: null,
         phoneNo: null,
         postcode: null,
         prefecture: null,
@@ -1265,6 +1302,7 @@ export default {
         nameKana: '',
         nameJa: '',
         partnerUserId: '',
+        payer: '',
         phoneNo: '',
         postcode: '',
         prefecture: '',
@@ -1416,6 +1454,7 @@ export default {
       this.input.nameKana = application?.nameKana;
       this.input.nameJa = application?.nameJa;
       this.input.partnerUserId = application?.partnerUserId;
+      this.input.payer = application?.payer;
       this.input.phoneNo = application?.phoneNo;
       this.input.postcode = application?.postcode;
       this.input.prefecture = application?.prefecture;
@@ -1746,6 +1785,14 @@ export default {
          * パートナーユーザーID
          */
         this.error.partnerUserId = null;
+        /**
+         * 支払者
+         */
+        this.error.payer = validations.validateChars({
+          value: this.input.payer,
+          size: 1,
+          requiredCheck: true,
+        });
         /**
          * 電話番号、携帯番号
          */

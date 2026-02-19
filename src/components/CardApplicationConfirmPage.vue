@@ -265,6 +265,14 @@
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">
+              <span class="list-item-title">
+                {{ !isAuthenticated ? '年次登録料・' : '' }}申請料・カード発行料のお支払い方法：
+              </span>
+              <span class="list-item-value--row-1-col-2">{{ payer }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
               <span class="list-item-title">備考：</span>
               <span class="list-item-value--row-1-col-2">{{ remarks }}</span>
             </div>
@@ -514,6 +522,12 @@ export default {
      */
     partnerUserId: function () {
       return this.input?.partnerUserId;
+    },
+    /**
+     * 支払者
+     */
+    payer: function () {
+      return this.$store.getters['ccardApplication/payerValue'](this.input?.payer);
     },
     /**
      * 電話番号
