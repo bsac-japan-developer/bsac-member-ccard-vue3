@@ -573,10 +573,10 @@
               {{ this.error.email }}
             </span>
           </v-ons-list-item>
-          <v-ons-list-header v-if="input.rankGroupId !== 3">
+          <v-ons-list-header v-if="input.applicationType === 3">
             <span class="list-header">他教育機関認定情報（クロスオーバーの場合のみ入力）</span>
           </v-ons-list-header>
-          <v-ons-list-item v-if="input.rankGroupId !== 3" modifier="longdivider">
+          <v-ons-list-item v-if="input.applicationType === 3" modifier="longdivider">
             <span class="list-item-title">教育機関名</span>
             <div class="list-item-value">
               <v-ons-input
@@ -593,7 +593,7 @@
               {{ this.error.crossoverAssosiationName }}
             </span>
           </v-ons-list-item>
-          <v-ons-list-item v-if="input.rankGroupId !== 3" modifier="longdivider">
+          <v-ons-list-item v-if="input.applicationType === 3" modifier="longdivider">
             <span class="list-item-title">ランク名</span>
             <div class="list-item-value">
               <v-ons-input
@@ -611,7 +611,7 @@
               {{ this.error.crossoverRankName }}
             </span>
           </v-ons-list-item>
-          <v-ons-list-item v-if="input.rankGroupId !== 3" modifier="longdivider">
+          <v-ons-list-item v-if="input.applicationType === 3" modifier="longdivider">
             <span class="list-item-title">カードNo</span>
             <div class="list-item-value">
               <v-ons-input
@@ -629,7 +629,7 @@
               {{ this.error.crossoverCardNo }}
             </span>
           </v-ons-list-item>
-          <v-ons-list-item v-if="input.rankGroupId !== 3" modifier="longdivider">
+          <v-ons-list-item v-if="input.applicationType === 3" modifier="longdivider">
             <span class="list-item-title"> 認定日 </span>
             <div class="list-item-value">
               <div class="inputs-side-by-side-wrapper">
