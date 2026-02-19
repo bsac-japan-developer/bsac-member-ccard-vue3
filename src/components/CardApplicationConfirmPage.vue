@@ -253,6 +253,18 @@
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">
+              <span class="list-item-title">書類送付先：</span>
+              <span class="list-item-value--row-1-col-2">{{ deliverDocumentTo }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">メール送付先：</span>
+              <span class="list-item-value--row-1-col-2">{{ deliverEmailTo }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
               <span class="list-item-title">備考：</span>
               <span class="list-item-value--row-1-col-2">{{ remarks }}</span>
             </div>
@@ -363,6 +375,22 @@ export default {
     deliverCardTo: function () {
       return this.$store.getters['ccardApplication/cardSendingDestinationValue'](
         this.input?.deliverCardTo
+      );
+    },
+    /**
+     * 書類送付先
+     */
+    deliverDocumentTo: function () {
+      return this.$store.getters['ccardApplication/documentSendingDestinationValue'](
+        this.input?.deliverDocumentTo
+      );
+    },
+    /**
+     * メール送付先
+     */
+    deliverEmailTo: function () {
+      return this.$store.getters['ccardApplication/emailSendingDestinationValue'](
+        this.input?.deliverEmailTo
       );
     },
     /**

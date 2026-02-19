@@ -853,6 +853,50 @@
             </span>
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
+            <span class="list-item-title"> 書類送付先 </span>
+            <div class="list-item-value">
+              <select
+                v-model="input.deliverDocumentTo"
+                class="selectbox"
+                style="width: 75%; text-align-last: left"
+                @change="validate()"
+              >
+                <option
+                  v-for="destination in documentSendingDestinations"
+                  :key="destination.key"
+                  :value="destination.key"
+                >
+                  {{ destination.value }}
+                </option>
+              </select>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.deliverDocumentTo }}
+            </span>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <span class="list-item-title"> メール送付先 </span>
+            <div class="list-item-value">
+              <select
+                v-model="input.deliverEmailTo"
+                class="selectbox"
+                style="width: 75%; text-align-last: left"
+                @change="validate()"
+              >
+                <option
+                  v-for="destination in emailSendingDestinations"
+                  :key="destination.key"
+                  :value="destination.key"
+                >
+                  {{ destination.value }}
+                </option>
+              </select>
+            </div>
+            <span v-if="input.properties.editable" class="validation-message">
+              {{ this.error.deliverEmailTo }}
+            </span>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
             <span class="list-item-title">備考</span>
             <div class="list-item-value">
               <v-ons-input
@@ -1049,6 +1093,18 @@ export default {
       return this.$store.getters['ccardApplication/diveCenters'];
     },
     /**
+     * 書類送付先リスト
+     */
+    documentSendingDestinations: function () {
+      return this.$store.getters['ccardApplication/documentSendingDestinations'];
+    },
+    /**
+     * メール送付先リスト
+     */
+    emailSendingDestinations: function () {
+      return this.$store.getters['ccardApplication/emailSendingDestinations'];
+    },
+    /**
      * フリーメンバー名
      */
     freeMemberName: function () {
@@ -1145,6 +1201,8 @@ export default {
         crossoverCertifyAtYear: null,
         crossoverRankName: null,
         deliverCardTo: null,
+        deliverDocumentTo: null,
+        deliverEmailTo: null,
         diveCenterId: null,
         diverId: null,
         diverUserId: null,
@@ -1188,6 +1246,8 @@ export default {
         crossoverCertifyAt: '',
         crossoverRankName: '',
         deliverCardTo: '',
+        deliverDocumentTo: '',
+        deliverEmailTo: '',
         diveCenterId: '',
         diverId: '',
         diverUserId: '',
@@ -1334,6 +1394,8 @@ export default {
       if (!isCopy) this.input.crossoverCertifyAtYear = application?.crossoverCertifyAtYear;
       if (!isCopy) this.input.crossoverRankName = application?.crossoverRankName;
       this.input.deliverCardTo = application?.deliverCardTo;
+      this.input.deliverDocumentTo = application?.deliverDocumentTo;
+      this.input.deliverEmailTo = application?.deliverEmailTo;
       this.input.diveCenterId = application?.diveCenterId;
       this.input.diveCenterName = application?.diveCenterName;
       this.input.email = application?.email;
@@ -1540,6 +1602,22 @@ export default {
          */
         this.error.deliverCardTo = validations.validateChars({
           value: this.input.deliverCardTo,
+          size: 1,
+          requiredCheck: true,
+        });
+        /**
+         * 書類送付先
+         */
+        this.error.deliverDocumentTo = validations.validateChars({
+          value: this.input.deliverDocumentTo,
+          size: 1,
+          requiredCheck: true,
+        });
+        /**
+         * メール送付先
+         */
+        this.error.deliverEmailTo = validations.validateChars({
+          value: this.input.deliverEmailTo,
           size: 1,
           requiredCheck: true,
         });

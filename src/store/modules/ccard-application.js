@@ -10,6 +10,8 @@ const state = {
   cardApplications: [],
   cardSendingDestinations: [],
   diveCenters: [],
+  documentSendingDestinations: [],
+  emailSendingDestinations: [],
   genders: [],
   idPhoto: null,
   input: {},
@@ -47,7 +49,6 @@ const getters = {
     }
   },
   cardSendingDestinationValue: (state) => (key) => {
-    console.log(`key: ${key}`);
     const destinations = state.cardSendingDestinations.filter((destination) => {
       return destination.key === key;
     });
@@ -65,6 +66,22 @@ const getters = {
     });
     if (diveCenters.length < 1) return null;
     return diveCenters[0].name;
+  },
+  documentSendingDestinations: (state) => state.documentSendingDestinations || [],
+  documentSendingDestinationValue: (state) => (key) => {
+    const destinations = state.documentSendingDestinations.filter((destination) => {
+      return destination.key === key;
+    });
+    if (destinations.length < 1) return null;
+    return destinations[0].value;
+  },
+  emailSendingDestinations: (state) => state.emailSendingDestinations || [],
+  emailSendingDestinationValue: (state) => (key) => {
+    const destinations = state.emailSendingDestinations.filter((destination) => {
+      return destination.key === key;
+    });
+    if (destinations.length < 1) return null;
+    return destinations[0].value;
   },
   freeMemberName: (state) => (value) => {
     if (isNaN(parseInt(value))) return null;
@@ -158,6 +175,8 @@ const getters = {
       crossover_certify_at: `${input.crossoverCertifyAtYear}-${input.crossoverCertifyAtMonth}-${input.crossoverCertifyAtDay}`,
       crossover_rank_name: input.crossoverRankName,
       deliver_card_to: input.deliverCardTo,
+      deliver_document_to: input.deliverDocumentTo,
+      deliver_email_to: input.deliverEmailTo,
       dive_center_id: input.diveCenterId !== null ? input.diveCenterId : -1,
       email: input.email,
       emergency_name: input.emergencyName,
@@ -307,6 +326,8 @@ const mutations = {
           : null,
       crossoverRankName: application?.crossoverRankName,
       deliverCardTo: application?.deliverCardTo,
+      deliverDocumentTo: application?.deliverDocumentTo,
+      deliverEmailTo: application?.deliverEmailTo,
       diveCenterId: application?.diveCenterId,
       diveCenterName: application?.diveCenterName,
       // diverId: application.diverId === -1 ? null : application.diverId,
@@ -347,6 +368,25 @@ const mutations = {
       ?.trim();
   },
   /**
+   * 書類送付先リストをセットする
+   * @param {*} state
+   * @param {*} response
+   */
+  setDocumentSendingDestinations(state, response) {
+    if (!response?.data?.options.document_sending_destinations) return;
+
+    const list = [];
+    response.data.options.document_sending_destinations.forEach((value) => {
+      list.push(conversions.toCamelCaseForObject(value));
+    });
+    state.documentSendingDestinations = list;
+    log.output(
+      `documentApplication.setCardSendingDestinations`,
+      `state.documentSendingDestinations`,
+      state.documentSendingDestinations
+    );
+  },
+  /**
    * ダイブセンターデータをセットする
    * @param {*} state
    * @param {*} response
@@ -360,6 +400,25 @@ const mutations = {
     });
     state.diveCenters = list;
     log.output(`cardApplication.setDiveCenters`, `state.diveCenters`, state.diveCenters);
+  },
+  /**
+   * メール送付先リストをセットする
+   * @param {*} state
+   * @param {*} response
+   */
+  setEmailSendingDestinations(state, response) {
+    if (!response?.data?.options.email_sending_destinations) return;
+
+    const list = [];
+    response.data.options.email_sending_destinations.forEach((value) => {
+      list.push(conversions.toCamelCaseForObject(value));
+    });
+    state.emailSendingDestinations = list;
+    log.output(
+      `emailApplication.setCardSendingDestinations`,
+      `state.emailSendingDestinations`,
+      state.emailSendingDestinations
+    );
   },
   /**
    * 性別データをセットする
@@ -581,6 +640,8 @@ const actions = {
         'setDetailData',
         'setCardSendingDestinations',
         'setDiveCenters',
+        'setDocumentSendingDestinations',
+        'setEmailSendingDestinations',
         'setGenders',
         'setMembers',
         'setMemberStatuses',
