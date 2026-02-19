@@ -928,7 +928,7 @@
           <v-ons-list-item modifier="longdivider">
             <span class="list-item-title">備考</span>
             <div class="list-item-value">
-              <v-ons-input
+              <!-- <v-ons-input
                 placeholder=""
                 type="text"
                 v-model="input.remarks"
@@ -936,7 +936,16 @@
                 :readonly="!input.properties.editable"
                 modifier="material"
                 class="textbox"
-              ></v-ons-input>
+              ></v-ons-input> -->
+              <textarea
+                v-model="input.remarks"
+                @blur="validate()"
+                cols="35"
+                rows="10"
+                style="font-size: 1rem; line-height: 1rem"
+                :disabled="!input.properties.editable"
+              >
+              </textarea>
             </div>
             <span v-if="input.properties.editable" class="validation-message">
               {{ this.error.remarks }}
@@ -1845,11 +1854,11 @@ export default {
           requiredCheck: true,
         });
         /**
-         * 都道府県
+         * 備考
          */
         this.error.remarks = validations.validateChars({
           value: this.input.remarks,
-          size: 50,
+          size: 1000,
           requiredCheck: false,
         });
         /**

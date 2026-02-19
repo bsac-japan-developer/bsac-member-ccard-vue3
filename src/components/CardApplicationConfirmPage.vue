@@ -274,7 +274,9 @@
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">
               <span class="list-item-title">備考：</span>
-              <span class="list-item-value--row-1-col-2">{{ remarks }}</span>
+              <span class="list-item-value--row-1-col-2" style="white-space: pre-line">
+                {{ remarks }}
+              </span>
             </div>
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
