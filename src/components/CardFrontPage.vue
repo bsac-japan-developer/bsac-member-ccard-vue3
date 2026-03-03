@@ -35,6 +35,7 @@
       <div class="quiet-button-area">
         <v-ons-button
           @click="toCardApplicationInputPage"
+          :disabled="!(this.isActive || this.isNegative)"
           modifier="cta block"
           class="button-transition"
         >
@@ -57,7 +58,7 @@
         </v-ons-button>
         <div v-if="!(this.isActive || this.isNegative)" class="member-registration-recommend">
           <p class="text-style">
-            事故報告機能、ランク申請機能を使うためにはBSACメンバー登録が必要です
+            ランク申請機能、事故報告機能を使うためにはBSACメンバー登録が必要です
           </p>
         </div>
         <p v-if="levelupCardsCount !== 0 || sdcCardsCount !== 0">■その他のカード / Other Cards</p>
