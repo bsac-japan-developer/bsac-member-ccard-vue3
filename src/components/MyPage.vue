@@ -5,6 +5,9 @@
       <p class="note--center">登録中のメンバー情報を表示しています。</p>
     </div>
     <div id="content__body">
+      <v-ons-button modifier="quiet" @click="refresh" class="reload-button">
+        <img src="../../www/images/reload.png" class="reload-button-image" />
+      </v-ons-button>
       <div class="input-area">
         <v-ons-list modifier="inset">
           <v-ons-list-header>
@@ -193,6 +196,9 @@ export default {
     member: function () {
       return this.$store.getters['member/member'] || {};
     },
+    online: function () {
+      return this.$store.getters['env/online'];
+    },
   },
   created: function () {},
   data() {
@@ -300,6 +306,46 @@ export default {
         this.getDeviceInfoFromBrowser();
       }
     },
+
+    /**
+     * データを最新化する
+     */
+    refresh: async function () {
+      this.$emit('show-loading-navigation');
+      try {
+        // 認証チェック
+        this.$store.commit('user/updateTimeToExpire');
+        if (!this.$store.getters['user/isAuthenticated']) {
+          this.$ons.notification.confirm({
+            title: '確認',
+            message: '前回ログインしてから一定時間経過したためログアウトします',
+            buttonLabels: ['はい'],
+            callback: () => this.signout(),
+          });
+        }
+
+        // データ取得処理を並列実行
+        const results = await Promise.all([
+          this.$store.dispatch('member/show'),
+          this.$store.dispatch('ccard/index'),
+          this.$store.dispatch('link/index'),
+          this.$store.dispatch('notification/index'),
+        ]);
+
+        // データ取得日時を設定する
+        this.$store.commit('ccard/setTakenCardsAt');
+
+        this.$ons.notification.alert({
+          title: 'データ取得',
+          message: this.online ? '最新データを取得しました' : 'サーバに接続できません',
+        });
+      } catch (error) {
+        this.$logger.error(`[${this.$options.name}/refresh] ${error}`);
+        this.$ons.notification.alert({ title: 'エラー', message: error.message });
+      } finally {
+        this.$emit('hide-loading-navigation');
+      }
+    },
     /**
      * ログアウトする
      * @param answer
@@ -384,10 +430,20 @@ export default {
     // マウント時にもトークン取得を試みる（ブラウザ/一部の環境用）
     if (this.setupFcmToken) this.setupFcmToken();
   },
+  name: 'MyPage',
 };
 </script>
 
 <style scoped>
 @import '../stylesheets/base.css';
 @import '../stylesheets/form.css';
+
+.reload-button {
+  margin: 0;
+  text-align: right;
+}
+
+.reload-button-image {
+  width: 25px;
+}
 </style>

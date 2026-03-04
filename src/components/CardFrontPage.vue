@@ -189,7 +189,8 @@ export default {
           });
         }
       } catch (error) {
-        console.error(error);
+        this.$logger.error(`[${this.$options.name}/refresh] ${error}`);
+        this.$ons.notification.alert({ title: 'エラー', message: error.message });
       } finally {
         this.$emit('hide-loading-navigation');
 
