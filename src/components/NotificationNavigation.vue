@@ -44,6 +44,8 @@ export default {
     if (this.$ons.platform.isIOS() || this.$ons.platform.isAndroid()) {
       // プッシュ通知用トピックを登録する
       window.FirebasePlugin.subscribe(this.$store.getters['env/topic'], null, null);
+      // バッチの数字を消す
+      window.FirebasePlugin.setBadgeNumber(0);
     }
   },
   name: 'NotificationNavigation',
