@@ -149,6 +149,14 @@
                 </v-ons-list-item>
                 <v-ons-list-item modifier="longdivider">
                   <div class="list-item-container">
+                    <span class="list-item-title">識別ID：</span>
+                    <span class="list-item-value--row-1-col-2">
+                      {{ bundleId }}
+                    </span>
+                  </div>
+                </v-ons-list-item>
+                <v-ons-list-item modifier="longdivider">
+                  <div class="list-item-container">
                     <span class="list-item-title">トークン：</span>
                     <span class="list-item-value--row-1-col-2">
                       {{ fcmToken }}
@@ -181,6 +189,7 @@
 
 <script>
 import { markRaw } from 'vue';
+import googleInfo from '@/common/google-info.json';
 import memberRegistrationChangePage from '@/components/MemberRegistrationChangePage.vue';
 import splitterToolbar from '@/components/parts/SplitterToolbar.vue';
 import storage from '@/common/local-storage';
@@ -190,6 +199,9 @@ export default {
     splitterToolbar,
   },
   computed: {
+    bundleId: function () {
+      return googleInfo?.bundleId || '';
+    },
     envVersion: function () {
       return this.$store.getters['env/version'];
     },

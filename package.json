@@ -32,7 +32,10 @@
         "monaca:debug": "npm run watch",
         "dev": "cross-env NODE_ENV=development vite",
         "watch": "cross-env NODE_ENV=development vite build --watch",
-        "build": "cross-env NODE_ENV=production vite build"
+        "build": "cross-env NODE_ENV=production vite build",
+        "generate:google-info": "node scripts/generate-google-info.js",
+        "predev": "npm run generate:google-info",
+        "prebuild": "npm run generate:google-info"
     },
     "cordova": {
         "plugins": {
