@@ -12,8 +12,8 @@ const getters = {
   hasRead: (state) => (id, updatedAt) => {
     // console.log(`[notification.vue] hasRead called. id: ${id} updatedAt: ${updatedAt}`);
 
-    let readNotifications = JSON.parse(storage.getItem('readNotifications'));
-    if (!readNotifications || !Array.isArray(readNotifications)) return;
+    let readNotifications = storage.getItem('readNotifications');
+    if (!readNotifications || !Array.isArray(readNotifications)) return false;
 
     for (let notification of readNotifications) {
       if (notification?.id === id && notification?.updatedAt === updatedAt) return true;
@@ -43,7 +43,7 @@ const mutations = {
     // );
     if (!payload?.id || !payload?.updatedAt) return;
 
-    let readNotifications = JSON.parse(storage.getItem('readNotifications'));
+    let readNotifications = storage.getItem('readNotifications');
     if (!readNotifications || !Array.isArray(readNotifications)) readNotifications = [];
 
     // console.log(`readNotifications: ${JSON.stringify(readNotifications)}`);
@@ -56,7 +56,7 @@ const mutations = {
     // console.log(`[notification.vue] addReadNotifications judge: ${judge}`);
     if (!judge) readNotifications.push(payload);
 
-    storage.setItem('readNotifications', JSON.stringify(readNotifications));
+    storage.setItem('readNotifications', readNotifications);
   },
   /**
    * データをクリアする
@@ -66,6 +66,13 @@ const mutations = {
     state.notification = {};
     state.notifications = [];
     storage.removeItem('notifications');
+  },
+  /**
+   * 既読データをクリアする
+   * @param {*} state
+   */
+  clearReadNotifications(state) {
+    storage.removeItem('readNotifications');
   },
   /**
    * 既読にする
@@ -91,7 +98,7 @@ const mutations = {
     for (let notification of state.notifications) {
       notification.hasRead = false;
     }
-    let readNotifications = JSON.parse(storage.getItem('readNotifications'));
+    let readNotifications = storage.getItem('readNotifications');
     if (readNotifications && Array.isArray(readNotifications)) {
       for (let readNotification of readNotifications) {
         for (let notification of state.notifications) {

@@ -70,6 +70,7 @@ export default {
      * 全て既読にする
      */
     doHasReadAll: function () {
+      this.$store.commit('notification/clearReadNotifications');
       for (let notification of this.notifications) {
         this.$store.commit('notification/addReadNotifications', {
           id: notification?.id,
