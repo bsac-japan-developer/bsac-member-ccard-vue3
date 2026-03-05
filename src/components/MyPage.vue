@@ -45,6 +45,12 @@
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
             <div class="list-item-container">
+              <span class="list-item-title">血液型：</span>
+              <span class="list-item-value--row-1-col-2"> {{ member?.bloodTypeText }}</span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
               <span class="list-item-title">郵便番号：</span>
               <span class="list-item-value--row-1-col-2"> {{ member?.postcode }} </span>
             </div>
@@ -89,6 +95,70 @@
             <div class="list-item-container">
               <span class="list-item-title">メールアドレス：</span>
               <span class="list-item-value--row-1-col-2"> {{ member?.email }} </span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">勤務先名：</span>
+              <span class="list-item-value--row-1-col-2"> {{ member?.workplaceName }} </span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">勤務先 郵便番号：</span>
+              <span class="list-item-value--row-1-col-2"> {{ member?.workplacePostcode }} </span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">勤務先 住所：</span>
+              <span class="list-item-value--row-1-col-2"> {{ member?.workplaceAddress }} </span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">勤務先 電話番号：</span>
+              <span class="list-item-value--row-1-col-2"> {{ member?.workplacePhoneNo }} </span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">緊急連絡先 氏名：</span>
+              <span class="list-item-value--row-1-col-2"> {{ member?.emergencyName }} </span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">緊急連絡先 郵便番号：</span>
+              <span class="list-item-value--row-1-col-2"> {{ member?.emergencyPostcode }} </span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">緊急連絡先 住所：</span>
+              <span class="list-item-value--row-1-col-2"> {{ member?.emergencyAddress }} </span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">緊急連絡先 電話番号：</span>
+              <span class="list-item-value--row-1-col-2"> {{ member?.emergencyPhoneNo }} </span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">書類送付先：</span>
+              <span class="list-item-value--row-1-col-2">
+                {{ member?.deliverDocumentToText }}
+              </span>
+            </div>
+          </v-ons-list-item>
+          <v-ons-list-item modifier="longdivider">
+            <div class="list-item-container">
+              <span class="list-item-title">メール送付先：</span>
+              <span class="list-item-value--row-1-col-2">
+                {{ member?.deliverEmailToText }}
+              </span>
             </div>
           </v-ons-list-item>
           <v-ons-list-item modifier="longdivider">
