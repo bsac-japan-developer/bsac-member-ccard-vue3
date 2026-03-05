@@ -41,11 +41,61 @@ export default {
     },
   },
   mounted: function () {
-    if (this.$ons.platform.isIOS() || this.$ons.platform.isAndroid()) {
-      // プッシュ通知用トピックを登録する
-      window.FirebasePlugin.subscribe(this.$store.getters['env/topic'], null, null);
-      // バッチの数字を消す
-      window.FirebasePlugin.setBadgeNumber(0);
+    const clearBadge = () => {
+      try {
+        // FirebaseX の API を使ってバッジを0に
+        if (window.FirebasePlugin && typeof window.FirebasePlugin.setBadgeNumber === 'function') {
+          window.FirebasePlugin.setBadgeNumber(
+            0,
+            () => {
+              this.$logger.info(`[${this.$options.name}] FirebasePlugin.setBadgeNumber OK`);
+            },
+            (err) => {
+              this.$logger.error(
+                `[${this.$options.name}] FirebasePlugin.setBadgeNumber error ${err}`
+              );
+            }
+          );
+        }
+      } catch (error) {
+        this.$logger.error(`[${this.$options.name}] clearBadge error ${error}`);
+      }
+    };
+
+    const setup = () => {
+      if (this.$ons.platform.isIOS() || this.$ons.platform.isAndroid()) {
+        // プッシュ通知用トピックを登録する（存在チェックとログ付き）
+        try {
+          const topic = this.$store.getters['env/topic'];
+          if (window.FirebasePlugin && typeof window.FirebasePlugin.subscribe === 'function') {
+            window.FirebasePlugin.subscribe(
+              topic,
+              () => this.$logger.info(`[${this.$options.name}] subscribed ${topic}`),
+              (err) => this.$logger.error(`[${this.$options.name}] subscribe error ${err}`)
+            );
+          }
+        } catch (err) {
+          this.$logger.error(`[${this.$options.name}] subscribe exception ${err}`);
+        }
+
+        // バッジを消す
+        clearBadge();
+
+        // 端末がフォアグラウンドに戻ったときにもバッジを消す
+        try {
+          document.addEventListener('resume', clearBadge, false);
+        } catch (err) {
+          this.$logger.warn(`[${this.$options.name}] resume listener not attached: ${err}`);
+        }
+      }
+    };
+
+    // Cordova プラグインが利用可能になるのを待つ
+    if (window.cordova) {
+      document.addEventListener('deviceready', setup, false);
+    } else {
+      // web 上（開発）ではすぐセットアップ
+      setup();
     }
   },
   name: 'NotificationNavigation',
