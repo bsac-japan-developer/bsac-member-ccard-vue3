@@ -43,7 +43,18 @@ export default {
   mounted: function () {
     if (this.$ons.platform.isIOS() || this.$ons.platform.isAndroid()) {
       // プッシュ通知用トピックを登録する
-      window.FirebasePlugin.subscribe(this.$store.getters['env/topic'], null, null);
+      try {
+        const topic = this.$store.getters['env/topic'];
+        if (window.FirebasePlugin && typeof window.FirebasePlugin.subscribe === 'function') {
+          window.FirebasePlugin.subscribe(
+            topic,
+            () => this.$logger.info(`[${this.$options.name}] subscribed ${topic}`),
+            (err) => this.$logger.error(`[${this.$options.name}] subscribe error ${err}`)
+          );
+        }
+      } catch (err) {
+        this.$logger.error(`[${this.$options.name}] subscribe exception ${err}`);
+      }
     }
   },
   name: 'CardApplicationNavigation',

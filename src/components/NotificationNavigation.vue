@@ -64,7 +64,7 @@ export default {
 
     const setup = () => {
       if (this.$ons.platform.isIOS() || this.$ons.platform.isAndroid()) {
-        // プッシュ通知用トピックを登録する（存在チェックとログ付き）
+        // プッシュ通知用トピックを登録する
         try {
           const topic = this.$store.getters['env/topic'];
           if (window.FirebasePlugin && typeof window.FirebasePlugin.subscribe === 'function') {
