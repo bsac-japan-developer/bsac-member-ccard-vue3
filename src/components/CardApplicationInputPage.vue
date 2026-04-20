@@ -1050,10 +1050,11 @@ export default {
       result = result && this.error.crossoverCertifyAt === null;
       result = result && this.error.crossoverRankName === null;
       result = result && this.error.deliverCardTo === null;
+      result = result && this.error.deliverDocumentTo === null;
+      result = result && this.error.deliverEmailTo === null;
       result = result && this.error.diveCenterId === null;
       // result = result && this.error.diverId === null;
       // result = result && this.error.diverUserId === null;
-      result = result && this.error.deliverCardTo === null;
       result = result && this.error.email === null;
       result = result && this.error.emergencyName === null;
       result = result && this.error.emergencyPostcode === null;

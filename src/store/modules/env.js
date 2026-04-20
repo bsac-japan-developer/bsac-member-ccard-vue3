@@ -1,7 +1,7 @@
 const state = {
   env: 1, // 0:本番環境 1:開発環境 2:テスト環境
   online: true, // オンライン状態を表す
-  version: '2.3.2', // アプリバージョン
+  version: '2.3.3', // アプリバージョン
 };
 
 const getters = {
