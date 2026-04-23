@@ -4,6 +4,7 @@ import * as components from 'vue-onsenui/esm/components';
 import App from '@/App.vue';
 import 'onsenui/css/onsenui.css';
 import 'onsenui/css/onsen-css-components.css';
+import '@/stylesheets/safe-area.css';
 import store from '@/store';
 import 'ionicons/dist/css/ionicons.min.css';
 import mitt from 'mitt';

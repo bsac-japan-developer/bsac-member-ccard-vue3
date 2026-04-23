@@ -1,0 +1,49 @@
+/* Fallback safe-area support for newer iOS devices not recognized by Onsen's iPhone X flags. */
+html:not([onsflag-iphonex-portrait]):not([onsflag-iphonex-landscape]) {
+  /* Keep status bar overlap prevention, but tighten top spacing by 0.6rem. */
+  --safe-area-top-adjusted: max(0rem, calc(env(safe-area-inset-top, 0rem) - 0.6rem));
+  /* Lift toolbar contents (back/menu buttons and title) without shifting whole toolbar. */
+  --toolbar-content-lift: 0.2rem;
+}
+
+html:not([onsflag-iphonex-portrait]):not([onsflag-iphonex-landscape]) .toolbar {
+  top: var(--safe-area-top-adjusted);
+}
+
+html:not([onsflag-iphonex-portrait]):not([onsflag-iphonex-landscape]) .toolbar.toolbar--material {
+  top: var(--safe-area-top-adjusted);
+}
+
+html:not([onsflag-iphonex-portrait]):not([onsflag-iphonex-landscape]) .toolbar .toolbar__left,
+html:not([onsflag-iphonex-portrait]):not([onsflag-iphonex-landscape]) .toolbar .toolbar__center,
+html:not([onsflag-iphonex-portrait]):not([onsflag-iphonex-landscape]) .toolbar .toolbar__right {
+  transform: translateY(calc(var(--toolbar-content-lift) * -1));
+}
+
+html:not([onsflag-iphonex-portrait]):not([onsflag-iphonex-landscape])
+  .toolbar
+  + .page__background
+  + .page__content,
+html:not([onsflag-iphonex-portrait]):not([onsflag-iphonex-landscape])
+  .toolbar
+  + .page__background
+  + .page__content
+  .page_content {
+  top: 0;
+  /* 44px is Onsen iOS toolbar default; used only if --toolbar-height is not provided. */
+  padding-top: calc(var(--toolbar-height, 44px) + var(--safe-area-top-adjusted));
+}
+
+html:not([onsflag-iphonex-portrait]):not([onsflag-iphonex-landscape])
+  .toolbar.toolbar--material
+  + .page__background
+  + .page__content,
+html:not([onsflag-iphonex-portrait]):not([onsflag-iphonex-landscape])
+  .toolbar.toolbar--material
+  + .page__background
+  + .page__content
+  .page_content {
+  top: 0;
+  /* 56px is Onsen Material toolbar default; used only if --toolbar-material-height is not provided. */
+  padding-top: calc(var(--toolbar-material-height, 56px) + var(--safe-area-top-adjusted));
+}
